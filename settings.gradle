@@ -1,0 +1,2 @@
+include ':app', ':spos_sdk2', ':lib'
+rootProject.name='SPOS_SDK'
