@@ -1,16 +1,18 @@
-package com.example.spos_sdk2;
+package com.example.spos_sdk2.Settlement;
 
 import android.app.Activity;
 
-public class TxnData {
+import com.example.spos_sdk2.EnvBase;
+
+public class SettlementData {
 
     private String merchantId;
-    private String amount;
-    private String payRef;
     private String apiId;
     private String apiPassword;
-    EnvBase.TxnAction actionType;
-    EnvBase.PayGate payGate;
+    private String batchNo;
+    private String payBankId;
+    private String operatorId;
+    private EnvBase.PayGate payGate;
 
     public String getMerchantId() {
         return merchantId;
@@ -18,22 +20,6 @@ public class TxnData {
 
     public void setMerchantId(String merchantId) {
         this.merchantId = merchantId;
-    }
-
-    public String getAmount() {
-        return amount;
-    }
-
-    public void setAmount(String amount) {
-        this.amount = amount;
-    }
-
-    public String getPayRef() {
-        return payRef;
-    }
-
-    public void setPayRef(String payRef) {
-        this.payRef = payRef;
     }
 
     public String getApiId() {
@@ -52,12 +38,29 @@ public class TxnData {
         this.apiPassword = apiPassword;
     }
 
-    public EnvBase.TxnAction getActionType() {
-        return actionType;
+    public String getBatchNo() {
+        return batchNo;
     }
 
-    public void setActionType(EnvBase.TxnAction actionType) {
-        this.actionType = actionType;
+    public void setBatchNo(String batchNo) {
+        this.batchNo = batchNo;
+    }
+
+    public String getPayBankId() {
+        return payBankId;
+    }
+
+    public void setPayBankId(String payBankId) {
+        this.payBankId = payBankId;
+    }
+
+
+    public String getOperatorId() {
+        return operatorId;
+    }
+
+    public void setOperatorId(String operatorId) {
+        this.operatorId = operatorId;
     }
 
     public EnvBase.PayGate getPayGate() {

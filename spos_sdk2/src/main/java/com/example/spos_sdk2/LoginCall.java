@@ -24,7 +24,7 @@ import static com.example.spos_sdk2.LoginResult.*;
 
 public class LoginCall {
 
-    URL url = null;
+    private String baseUrl = null;
 
     LoginResult callLoginAPI(LoginData loginData){
 
@@ -34,7 +34,9 @@ public class LoginCall {
         LoginResult loginResult = new LoginResult();
 
         try {
-            url = setLoginURL(loginData.getPayGate());
+            baseUrl = PayGate.getLoginURL(loginData.getPayGate());
+            URL url = new URL(baseUrl);
+//            url = setLoginURL(loginData.getPayGate());
 
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             TrustModifier.relaxHostChecking(con);
@@ -97,18 +99,18 @@ public class LoginCall {
         return loginResult;
     }
 
-    private URL setLoginURL(EnvBase.PayGate payGate) throws MalformedURLException {
-
-        if (payGate.equals(EnvBase.PayGate.PAYDOLLAR)) {
-            url = new URL(Constants.url_paydollar_merInfo);
-        } else if (payGate.equals(EnvBase.PayGate.SIAMPAY)) {
-            url = new URL(Constants.url_siampay_merInfo);
-        } else if (payGate.equals(EnvBase.PayGate.PESOPAY)) {
-            url = new URL(Constants.url_pesopay_merInfo);
-        }
-
-        return url;
-    }
+//    private URL setLoginURL(EnvBase.PayGate payGate) throws MalformedURLException {
+//
+//        if (payGate.equals(EnvBase.PayGate.PAYDOLLAR)) {
+//            url = new URL(Constants.url_paydollar_merInfo);
+//        } else if (payGate.equals(EnvBase.PayGate.SIAMPAY)) {
+//            url = new URL(Constants.url_siampay_merInfo);
+//        } else if (payGate.equals(EnvBase.PayGate.PESOPAY)) {
+//            url = new URL(Constants.url_pesopay_merInfo);
+//        }
+//
+//        return url;
+//    }
 
     public static String getFullResponse(HttpURLConnection con) throws IOException {
         StringBuilder fullResponseBuilder = new StringBuilder();

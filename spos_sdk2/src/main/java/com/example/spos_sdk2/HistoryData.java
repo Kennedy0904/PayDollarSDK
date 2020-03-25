@@ -18,7 +18,6 @@ public class HistoryData {
     int pageNumber;
     int pageRecords;
     private EnvBase.PayGate payGate;
-    Activity activity;
 
     public String getMerchantId() {
         return merchantId;
@@ -132,11 +131,4 @@ public class HistoryData {
         this.payGate = payGate;
     }
 
-    public Activity getActivity() {
-        return activity;
-    }
-
-    public void setActivity(Activity activity) {
-        this.activity = activity;
-    }
 }

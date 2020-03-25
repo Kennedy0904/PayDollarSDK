@@ -1,5 +1,6 @@
 package com.example.spos_sdk2;
 
+import android.app.Activity;
 import android.util.Log;
 
 public class PayRequest {
@@ -7,9 +8,13 @@ public class PayRequest {
     protected static final String PAYMENT_TAG = "PaymentReq";
 
     PayData payData;
-
-    ErrorResult errorResult = new ErrorResult();
     PayResponse response;
+    ErrorResult errorResult = new ErrorResult();
+    Activity activity;
+
+    public PayRequest(Activity activity){
+        this.activity = activity;
+    }
 
     public void setPayData(PayData payData){
         this.payData = payData;
@@ -30,7 +35,7 @@ public class PayRequest {
                     PayCall pReq = new PayCall();
                     final PayResult result = pReq.callPaymentAPI(payData);
 
-                    payData.getActivity().runOnUiThread(new Runnable() {
+                    activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             response.getResponse(result);
@@ -41,7 +46,7 @@ public class PayRequest {
 
                     Log.d(PAYMENT_TAG, "request onError");
 
-                    payData.getActivity().runOnUiThread(new Runnable() {
+                    activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             response.onError(errorResult);
@@ -86,9 +91,6 @@ public class PayRequest {
         } else if(payData.getPayGate() == null){
             errorResult.setErrCode(ErrorCode.ERR_PAYGATE);
             errorResult.setErrMessage("Please add the paygate.");
-        } else if (payData.getActivity() == null) {
-            errorResult.setErrCode(ErrorCode.ERR_ACTIVITY);
-            errorResult.setErrMessage("Please add the activity");
         } else {
             isDataValid = true;
         }
@@ -96,11 +98,11 @@ public class PayRequest {
         if (payData.getPayment() != null && (payData.getTxnNo() == null || payData.getTxnNo().isEmpty())) {
             if (payData.getPayment().equals(EnvBase.Payment.SCAN_QR)) {
                 errorResult.setErrCode(ErrorCode.ERR_TXNNO);
-                errorResult.setErrMessage("Please add the transaction no.");
+                errorResult.setErrMessage("Please add the transaction number");
                 isDataValid = false;
             } else if (payData.getPayment().equals(EnvBase.Payment.CARD)) {
                 errorResult.setErrCode(ErrorCode.ERR_TXNNO);
-                errorResult.setErrMessage("Please add the card no.");
+                errorResult.setErrMessage("Please add the card number");
                 isDataValid = false;
             }else {
                 isDataValid = true;

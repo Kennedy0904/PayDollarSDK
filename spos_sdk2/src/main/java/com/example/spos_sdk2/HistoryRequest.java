@@ -1,8 +1,7 @@
 package com.example.spos_sdk2;
 
+import android.app.Activity;
 import android.util.Log;
-
-import java.util.ArrayList;
 
 public class HistoryRequest {
 
@@ -11,6 +10,11 @@ public class HistoryRequest {
     HistoryData historyData;
     HistoryResponse response;
     ErrorResult errorResult = new ErrorResult();
+    Activity activity;
+
+    public HistoryRequest(Activity activity){
+        this.activity = activity;
+    }
 
     public void setHistoryData(HistoryData historyData) {
 
@@ -32,7 +36,7 @@ public class HistoryRequest {
 
                     final String records = req.callHistoryAPI(historyData);
 
-                    historyData.getActivity().runOnUiThread(new Runnable() {
+                    activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             response.getResponse(records);
@@ -42,7 +46,7 @@ public class HistoryRequest {
 
                     Log.d(HISTORY_TAG, "request onError");
 
-                    historyData.getActivity().runOnUiThread(new Runnable() {
+                    activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             response.onError(errorResult);
@@ -81,9 +85,6 @@ public class HistoryRequest {
         } else if(historyData.getPayGate() == null){
             errorResult.setErrCode(ErrorCode.ERR_PAYGATE);
             errorResult.setErrMessage("Please add the paygate.");
-        } else if (historyData.getActivity() == null) {
-            errorResult.setErrCode(ErrorCode.ERR_ACTIVITY);
-            errorResult.setErrMessage("Please add the activity");
         } else {
             isDataValid = true;
         }
@@ -95,7 +96,7 @@ public class HistoryRequest {
         setHistoryResponse(response);
     };
 
-    protected void setHistoryResponse(HistoryResponse response) {
+    private void setHistoryResponse(HistoryResponse response) {
         this.response = response;
     }
 }

@@ -8,7 +8,6 @@ public class InquiryData {
     private String payRef;
     private EnvBase.PayMethod pMethod;
     private EnvBase.PayGate payGate;
-    private Activity activity;
 
     public String getMerchantId() {
         return merchantId;
@@ -40,13 +39,5 @@ public class InquiryData {
 
     public void setPayGate(EnvBase.PayGate payGate) {
         this.payGate = payGate;
-    }
-
-    public Activity getActivity() {
-        return activity;
-    }
-
-    public void setActivity(Activity activity) {
-        this.activity = activity;
     }
 }

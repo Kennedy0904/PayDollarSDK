@@ -1,48 +1,62 @@
 package com.example.spos_sdk2;
-
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import org.apache.http.NameValuePair;
 
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 
-import static android.content.Context.MODE_PRIVATE;
-
 public class PayGate {
-    public static String MasterMerRef;
-    public static String URLcheckVersion;
-    public static String URLpayment;
-    public static String URLorder;
-    public static String URLmerInfo;
-    public static String URLsendNoti;
-    public static String URLfileUpload;
-    public static String URLgenTxtXML;
-    public static String URLpartnerlogo;
-    public static String URLsettinginfo;
-    public static String URLQRAction;
 
-    public static String countryCode;
+    private static String URLmerInfo;
+    private static String URLpayment;
+    private static String URLQRAction;
+    private static String URLgenTxtJSON;
+    private static String URLorder;
+    private static String URLpayFDMSReturnMPOS;
+    private static String URLgenTxtXML_Settlement;
+    private static String URLpartnerlogo;
 
-    public static String url;
-
-    public static String getBoostURL(EnvBase.PayGate payGate) {
-        if(payGate.equals(EnvBase.PayGate.PAYDOLLAR)){
-            url = Constants.url_paydollar_checkBoostStatus;
+    /** Merchant Login URL */
+    public static String getLoginURL(EnvBase.PayGate payGate) {
+        if (payGate.equals(EnvBase.PayGate.PAYDOLLAR)) {
+            URLmerInfo = Constants.url_paydollar_merInfo;
         } else if (payGate.equals(EnvBase.PayGate.SIAMPAY)) {
-            url = Constants.url_paydollar_checkBoostStatus;
+            URLmerInfo = Constants.url_pesopay_merInfo;
         } else if (payGate.equals(EnvBase.PayGate.PESOPAY)) {
-            url = Constants.url_paydollar_checkBoostStatus;
+            URLmerInfo = Constants.url_siampay_merInfo;
         }
-        return url;
+        return URLmerInfo;
     }
 
+    /** PayComp URL */
+    public static String getPayCompURL(EnvBase.PayGate payGate) {
+
+        if (payGate.equals(EnvBase.PayGate.PAYDOLLAR)) {
+            URLpayment = Constants.url_paydollar_payComp;
+        } else if (payGate.equals(EnvBase.PayGate.SIAMPAY))  {
+            URLpayment = Constants.url_pesopay_payComp;
+        } else if (payGate.equals(EnvBase.PayGate.PESOPAY)) {
+            URLpayment = Constants.url_siampay_payComp;
+        }
+        return URLpayment;
+    }
+
+    /** Boost Inquiry Payment URL */
+    public static String getBoostURL(EnvBase.PayGate payGate) {
+        if(payGate.equals(EnvBase.PayGate.PAYDOLLAR)){
+            URLQRAction = Constants.url_paydollar_checkBoostStatus;
+        } else if (payGate.equals(EnvBase.PayGate.SIAMPAY)) {
+            URLQRAction = Constants.url_paydollar_checkBoostStatus;
+        } else if (payGate.equals(EnvBase.PayGate.PESOPAY)) {
+            URLQRAction = Constants.url_paydollar_checkBoostStatus;
+        }
+        return URLQRAction;
+    }
+
+    /** Grab Inquiry Payment URL */
     public static String getGrabURL(EnvBase.PayGate payGate) {
         if(payGate.equals(EnvBase.PayGate.PAYDOLLAR)){
             URLQRAction = Constants.url_paydollar_GrabPayAction;
@@ -52,6 +66,7 @@ public class PayGate {
         return URLQRAction;
     }
 
+    /** PromptPay (KBank) Inquiry Payment URL */
     public static String getPromptPayURL(EnvBase.PayGate payGate) {
         if(payGate.equals(EnvBase.PayGate.PAYDOLLAR)){
             URLQRAction = Constants.url_paydollar_QRAction;
@@ -63,7 +78,20 @@ public class PayGate {
         return URLQRAction;
     }
 
-    public static String getURL_orderAPI(EnvBase.PayGate payGate) {
+    /** Retrieve Txn History URL */
+    public static String getHistoryURL(EnvBase.PayGate payGate) {
+        if (payGate.equals(EnvBase.PayGate.PAYDOLLAR)) {
+            URLgenTxtJSON = Constants.url_paydollar_genTxtJSONSPOS;
+        } else if (payGate.equals(EnvBase.PayGate.SIAMPAY)) {
+            URLgenTxtJSON = Constants.url_siampay_genTxtJSONSPOS;
+        } else if (payGate.equals(EnvBase.PayGate.PESOPAY)) {
+            URLgenTxtJSON = Constants.url_pesopay_genTxtJSONSPOS;
+        }
+        return URLgenTxtJSON;
+    }
+
+    /** orderAPI (Refund & Void) URL */
+    public static String getOrderAPIURL(EnvBase.PayGate payGate) {
         if(payGate.equals(EnvBase.PayGate.PAYDOLLAR)){
             URLorder = Constants.url_paydollar_orderApi;
         } else if (payGate.equals(EnvBase.PayGate.SIAMPAY)) {
@@ -75,45 +103,32 @@ public class PayGate {
         return URLorder;
     }
 
-    public static String getMasterMerRef(String payGate) {
-        if (Constants.pg_paydollar.equalsIgnoreCase(payGate)) {
-            MasterMerRef = "1";
-        } else if (Constants.pg_pesopay.equalsIgnoreCase(payGate)) {
-            MasterMerRef = "12";
-        } else if (Constants.pg_siampay.equalsIgnoreCase(payGate)) {
-            MasterMerRef = "13";
+    /** FDMS Payment Return URL */
+    public static String getFDMSReturnURL(EnvBase.PayGate payGate){
+        if(payGate.equals(EnvBase.PayGate.PAYDOLLAR)){
+            URLpayFDMSReturnMPOS=Constants.url_paydollar_payFDMSReturnMPOS;
+        } else if (payGate.equals(EnvBase.PayGate.SIAMPAY)) {
+            URLpayFDMSReturnMPOS=Constants.url_pesopay_payFDMSReturnMPOS;
+        } else if (payGate.equals(EnvBase.PayGate.PESOPAY)) {
+            URLpayFDMSReturnMPOS=Constants.url_siampay_payFDMSReturnMPOS;
         }
-        return MasterMerRef;
+
+        return URLpayFDMSReturnMPOS;
     }
 
-    public static String getURL_CheckStatus(String payGate) {
-        if (Constants.pg_paydollar.equalsIgnoreCase(payGate)) {
-            URLsendNoti = Constants.url_paydollar_CheckStatus;
+    /** Txn Settlement URL */
+    public static String getSettlementURL(EnvBase.PayGate payGate) {
+        if(payGate.equals(EnvBase.PayGate.PAYDOLLAR)){
+            URLgenTxtXML_Settlement = Constants.url_paydollar_genTxtJSONSPOS_Settlement;
+        } else if (payGate.equals(EnvBase.PayGate.SIAMPAY)) {
+            URLgenTxtXML_Settlement = Constants.url_pesopay_genTxtJSONSPOS_Settlement;
+        } else if (payGate.equals(EnvBase.PayGate.PESOPAY)) {
+            URLgenTxtXML_Settlement = Constants.url_siampay_genTxtJSONSPOS_Settlement;
         }
-        return URLsendNoti;
+        return URLgenTxtXML_Settlement;
     }
 
-    public static String getURL_SendOrder(String payGate) {
-        if (Constants.pg_paydollar.equalsIgnoreCase(payGate)) {
-            URLsendNoti = Constants.url_paydollar_sendOrder;
-        }
-        return URLsendNoti;
-    }
-
-
-    public static String getURL_PayComp(String payGate) {
-        if (Constants.pg_paydollar.equalsIgnoreCase(payGate)) {
-            URLpayment = Constants.url_paydollar_payComp;
-        } else if (Constants.pg_pesopay.equalsIgnoreCase(payGate)) {
-            URLpayment = Constants.url_pesopay_payComp;
-        } else if (Constants.pg_siampay.equalsIgnoreCase(payGate)) {
-            URLpayment = Constants.url_siampay_payComp;
-        }
-        return URLpayment;
-    }
-
-
-
+    /** PayForm URL */
     public static String getURL_PayForm(String payGate) {
         if (Constants.pg_paydollar.equalsIgnoreCase(payGate)) {
             URLpayment = Constants.url_paydollar_payForm;
@@ -125,63 +140,7 @@ public class PayGate {
         return URLpayment;
     }
 
-
-
-    public static String getURL_merInfo(String payGate) {
-        if (Constants.pg_paydollar.equalsIgnoreCase(payGate)) {
-            URLmerInfo = Constants.url_paydollar_merInfo;
-        } else if (Constants.pg_pesopay.equalsIgnoreCase(payGate)) {
-            URLmerInfo = Constants.url_pesopay_merInfo;
-        } else if (Constants.pg_siampay.equalsIgnoreCase(payGate)) {
-            URLmerInfo = Constants.url_siampay_merInfo;
-        }
-        return URLmerInfo;
-    }
-
-    public static String getURL_sendNoti(String payGate) {
-        if (Constants.pg_paydollar.equalsIgnoreCase(payGate)) {
-            URLsendNoti = Constants.url_paydollar_sendNoti;
-        } else if (Constants.pg_pesopay.equalsIgnoreCase(payGate)) {
-            URLsendNoti = Constants.url_pesopay_sendNoti;
-        } else if (Constants.pg_siampay.equalsIgnoreCase(payGate)) {
-            URLsendNoti = Constants.url_siampay_sendNoti;
-        }
-        return URLsendNoti;
-    }
-
-    public static String getURL_fileUpload(String payGate) {
-        if (Constants.pg_paydollar.equalsIgnoreCase(payGate)) {
-            URLfileUpload = Constants.url_paydollar_fileUpload;
-        } else if (Constants.pg_pesopay.equalsIgnoreCase(payGate)) {
-            URLfileUpload = Constants.url_pesopay_fileUpload;
-        } else if (Constants.pg_siampay.equalsIgnoreCase(payGate)) {
-            URLfileUpload = Constants.url_siampay_fileUpload;
-        }
-        return URLfileUpload;
-    }
-
-    public static String getURL_genTxtXML(String payGate) {
-        if (Constants.pg_paydollar.equalsIgnoreCase(payGate)) {
-            URLgenTxtXML = Constants.url_paydollar_genTxtXML;
-        } else if (Constants.pg_pesopay.equalsIgnoreCase(payGate)) {
-            URLgenTxtXML = Constants.url_pesopay_genTxtXML;
-        } else if (Constants.pg_siampay.equalsIgnoreCase(payGate)) {
-            URLgenTxtXML = Constants.url_siampay_genTxtXML;
-        }
-        return URLgenTxtXML;
-    }
-
-    public static String getURL_genTxtXMLMPOS(String payGate) {
-        if (Constants.pg_paydollar.equalsIgnoreCase(payGate)) {
-            URLgenTxtXML = Constants.url_paydollar_genTxtXMLMPOS;
-        } else if (Constants.pg_pesopay.equalsIgnoreCase(payGate)) {
-            URLgenTxtXML = Constants.url_pesopay_genTxtXMLMPOS;
-        } else if (Constants.pg_siampay.equalsIgnoreCase(payGate)) {
-            URLgenTxtXML = Constants.url_siampay_genTxtXMLMPOS;
-        }
-        return URLgenTxtXML;
-    }
-
+    /** Partner Logo URL */
     public static String getURL_partnerlogo(String payGate) {
         if (Constants.pg_paydollar.equalsIgnoreCase(payGate)) {
             URLpartnerlogo = Constants.url_paydollar_partnerlogo;
@@ -192,41 +151,6 @@ public class PayGate {
         }
         return URLpartnerlogo;
     }
-
-    public static String getCountryCode(String payGate) {
-        if (Constants.pg_paydollar.equalsIgnoreCase(payGate)) {
-            countryCode = Constants.countryCode_HK;
-        } else if (Constants.pg_pesopay.equalsIgnoreCase(payGate)) {
-            countryCode = Constants.countryCode_PH;
-        } else if (Constants.pg_siampay.equalsIgnoreCase(payGate)) {
-            countryCode = Constants.countryCode_TH;
-        }
-        return countryCode;
-    }
-
-    public static String getURL_checkVersion(String payGate) {
-        if (Constants.pg_paydollar.equalsIgnoreCase(payGate)) {
-            URLcheckVersion = Constants.url_check_version;
-        } else if (Constants.pg_pesopay.equalsIgnoreCase(payGate)) {
-            URLcheckVersion = Constants.url_check_version;
-        } else if (Constants.pg_siampay.equalsIgnoreCase(payGate)) {
-            URLcheckVersion = Constants.url_check_version;
-        }
-        return URLcheckVersion;
-    }
-
-    public static String getURL_settingInfo(String payGate){
-        if(Constants.pg_paydollar.equalsIgnoreCase(payGate)){
-            URLsettinginfo=Constants.url_paydollar_settinginfo;
-        }else if (Constants.pg_pesopay.equalsIgnoreCase(payGate)){
-            URLsettinginfo=Constants.url_paydollar_settinginfo;
-        }else if (Constants.pg_siampay.equalsIgnoreCase(payGate)){
-            URLsettinginfo=Constants.url_paydollar_settinginfo;
-        }
-        return URLsettinginfo;
-    }
-
-
 
     public static String getQuery(List<NameValuePair> params) throws UnsupportedEncodingException {
         StringBuilder result = new StringBuilder();

@@ -1,5 +1,6 @@
 package com.example.spos_sdk2;
 
+import android.app.Activity;
 import android.util.Log;
 
 public class TxnRequest {
@@ -7,9 +8,13 @@ public class TxnRequest {
     protected static final String TXN_TAG = "TransactionReq";
 
     TxnData txnData;
-
-    ErrorResult errorResult = new ErrorResult();
     TxnResponse response;
+    ErrorResult errorResult = new ErrorResult();
+    Activity activity;
+
+    public TxnRequest(Activity activity){
+        this.activity = activity;
+    }
 
     public void setTxnData(TxnData txnData){
         this.txnData = txnData;
@@ -30,7 +35,7 @@ public class TxnRequest {
                     TxnCall req = new TxnCall();
                     final TxnResult result = req.callVoidAPI(txnData);
 
-                    txnData.getActivity().runOnUiThread(new Runnable() {
+                    activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             response.getResponse(result);
@@ -41,7 +46,7 @@ public class TxnRequest {
 
                     Log.d(TXN_TAG, "request onError");
 
-                    txnData.getActivity().runOnUiThread(new Runnable() {
+                    activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             response.onError(errorResult);
@@ -80,9 +85,6 @@ public class TxnRequest {
         } else if(txnData.getPayGate() == null){
             errorResult.setErrCode(ErrorCode.ERR_PAYGATE);
             errorResult.setErrMessage("Please add the paygate.");
-        } else if (txnData.getActivity() == null) {
-            errorResult.setErrCode(ErrorCode.ERR_ACTIVITY);
-            errorResult.setErrMessage("Please add the activity");
         } else {
             isDataValid = true;
         }

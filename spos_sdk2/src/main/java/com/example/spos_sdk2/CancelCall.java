@@ -109,7 +109,7 @@ public class CancelCall {
         String url = null;
 
         if(payMethod.equals(EnvBase.PayMethod.BOOST)){
-            url = PayGate.getURL_PayComp(payGate.toString());
+            url = PayGate.getPayCompURL(payGate);
         } else if(payMethod.equals(EnvBase.PayMethod.GRABPAY)){
             url = PayGate.getGrabURL(payGate);
         } else if(payMethod.equals(EnvBase.PayMethod.PROMPTPAY)){

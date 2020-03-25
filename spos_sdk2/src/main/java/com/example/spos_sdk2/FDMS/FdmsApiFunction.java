@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.pax.fdms.opensdk.AdjustMsg;
 import com.pax.fdms.opensdk.GetTotalMsg;
@@ -106,6 +107,8 @@ public class FdmsApiFunction extends AppCompatActivity {
 
 	private HashMap<String, String> map = null;
 
+	FdmsResponse Fdresponse;
+
 	public FdmsApiFunction(Context context) {
 		this.context = context;
 	}
@@ -121,20 +124,28 @@ public class FdmsApiFunction extends AppCompatActivity {
 		String year = new SimpleDateFormat("yyyy").format(c.getTime());
 		String epYear = String.valueOf(parseInt(year) + 3);
 
-		FdmsVariable.setRequestAction("createTxn");
-		FdmsVariable.setCardNo("4518354303137777");
-		FdmsVariable.setSurcharge("0");
-		FdmsVariable.setpMethod("VISA");
-		FdmsVariable.setCardHolder("");
-		FdmsVariable.setEpMonth(epMonth);
-		FdmsVariable.setEpYear(epYear);
-		FdmsVariable.setOperatorId("admin");
-		FdmsVariable.setChannel("MPOS");
+		FdmsVariable fdmsVariable = new FdmsVariable();
+		fdmsVariable.setRequestAction("createTxn");
+		fdmsVariable.setCardNo("4518354303137777");
+		fdmsVariable.setSurcharge("0");
+		fdmsVariable.setpMethod("VISA");
+		fdmsVariable.setCardHolder("");
+		fdmsVariable.setEpMonth(epMonth);
+		fdmsVariable.setEpYear(epYear);
+		fdmsVariable.setOperatorId("admin");
+		fdmsVariable.setChannel("MPOS");
 
-		FdmsHttpRequest request = new FdmsHttpRequest(FdmsApiFunction.this, context);
-
+		FdmsHttpReq request = new FdmsHttpReq(new FdmsAsyncResponse() {
+			@Override
+			public void processFinish(String output) {
+				Fdresponse.getResponse(output);
+			}
+		}, fdmsVariable, FdmsApiFunction.this, context);
 		request.execute();
-		// continue to FdmsHttpRequest.java
+
+//		FdmsHttpReq request = new FdmsHttpReq(FdmsApiFunction.this, context);
+//		request.execute();
+
 	}
 
 	//**************************************
@@ -142,24 +153,24 @@ public class FdmsApiFunction extends AppCompatActivity {
 	//**************************************
 
 	// Sale Transaction
-	public void saleRequest() {
+	public void saleRequest(FdmsVariable fdmsVariable) {
 		SaleMsg.Request request = new SaleMsg.Request();
 		request.setAppId("com.pax.fdms.base24");
 		request.setPackageName("com.pax.fdms.base24");
-		request.setAmount((int)(parseFloat(FdmsVariable.getAmount()) * 100));
+		request.setAmount((int)(parseFloat(fdmsVariable.getAmount()) * 100));
 
-		transAPI = TransAPIFactory.createTransAPI((Activity) context);
+		transAPI = TransAPIFactory.createTransAPI((Activity)context);
 		boolean ret = transAPI.doTrans(request);
 		// response will go back to EnterAmount.java
 	}
 
 	// Void Transaction
-	public void voidRequest() {
+	public void voidRequest(FdmsVariable fdmsVariable) {
 		VoidMsg.Request request = new VoidMsg.Request();
 		request.setAppId("com.pax.fdms.base24");
 		request.setPackageName("com.pax.fdms.base24");
 		request.setShowDetail(true);
-		request.setInvoiceNo(parseInt(FdmsVariable.getInvoiceNo()));
+		request.setInvoiceNo(parseInt(fdmsVariable.getInvoiceNo()));
 		ITransAPI transAPI = TransAPIFactory.createTransAPI((Activity) context);
 		boolean ret = transAPI.doTrans(request);
 		// response will go back to DialogActivity.java
@@ -250,9 +261,9 @@ public class FdmsApiFunction extends AppCompatActivity {
 	}
 
 	// Reprint Transaction
-	public void reprintRequest() {
+	public void reprintRequest(FdmsVariable fdmsVariable) {
 		ReprintTransMsg.Request request = new ReprintTransMsg.Request();
-		request.setTraceNo(parseInt(FdmsVariable.getTraceNo()));
+		request.setTraceNo(parseInt(fdmsVariable.getTraceNo()));
 		request.setAppId("com.pax.fdms.base24");
 		request.setPackageName("com.pax.fdms.base24");
 		ITransAPI transAPI = TransAPIFactory.createTransAPI((Activity) context);
@@ -310,6 +321,15 @@ public class FdmsApiFunction extends AppCompatActivity {
 		return ret;
 	}
 
+	public void responseHandler(FdmsResponse response) {
+		setFDMSResponse(response);
+	}
+
+	protected void setFDMSResponse(FdmsResponse response) {
+		this.Fdresponse = response;
+	}
+
+
 	//*********************************************
 	//*   START FDMS API RESPONSE FUNCTION LIST   *
 	//*********************************************
@@ -331,6 +351,7 @@ public class FdmsApiFunction extends AppCompatActivity {
 				System.out.println("Intent value end");
 			}
 		}
+		System.out.println("Intent value end");
 
 		if (requestCode == 100 && response != null) {
 
@@ -403,201 +424,215 @@ public class FdmsApiFunction extends AppCompatActivity {
 			System.out.println("---transTime: " + transTime);
 			System.out.println("--- tvr: " + tvr);
 
-		}
+			FdmsVariable fdmsVariable = new FdmsVariable();
+			fdmsVariable.setResponseCode(saleResCodeFDMS);
+			fdmsVariable.setReturnMsg(rspMsg);
 
-//		if (saleResCodeFDMS == 0) {
-//			// Success Transaction
-//
-//			while (batchNo.length() < 6) {
-//				batchNo = "0" + batchNo;
-//			}
-//
-//			while (invoiceNo.length() < 6) {
-//				invoiceNo = "0" + invoiceNo;
-//			}
-//
-//			while (traceNo.length() < 6) {
-//				traceNo = "0" + traceNo;
-//			}
-//
-//			// Remove cardNo space
-//			cardNo = cardNo.replaceAll(" ", "");
-//
-//			// Check local batchNo with FDMS returned batchNo
-//			if (!GlobalFunction.getBatchNo(context).equalsIgnoreCase(batchNo)) {
-//				// Set local batchNo to FDMS latest batchNo
-//				GlobalFunction.setBatchNo(context, batchNo);
-//			}
-//
-//			if (payMethod.equalsIgnoreCase("MASTER")) {
-//				payMethod = "Master";
-//			}
-//
-//			// 'requestAction' used for send request in 'FdmsHttpRequest'
-//			FdmsVariable.setRequestAction("updateTxnAccepted");
-//			FdmsVariable.setAction("accepted");
-//			FdmsVariable.setInvoiceNo(invoiceNo);
-//			FdmsVariable.setCardNo(cardNo);
-//			FdmsVariable.setRRN(RRN);
-//			FdmsVariable.setBatchNo(batchNo);
-//			FdmsVariable.setTraceNo(traceNo);
-//			FdmsVariable.setPayMethod(payMethod);
-//			FdmsVariable.setAppCode(appCode);
-//			FdmsVariable.setTc(tc);
-//			FdmsVariable.setTsi(tsi);
-//			FdmsVariable.setAtc(atc);
-//			FdmsVariable.setTvr(tvr);
-//			FdmsVariable.setAppName(appName);
-//			FdmsVariable.setAid(aid);
-//
-//			FdmsHttpRequest updateTxn = new FdmsHttpRequest(FdmsApiFunction.this, context);
-//
-//			updateTxn.execute();
-//			// Continue to FdmsHttpRequest.java
-//		} else {
-//			FdmsVariable.setPayMethod("Card");
-//			//FdmsVariable.setCardNo("");
-//			FdmsHttpRequest updateTxn;
-//
-//			if (saleResCodeFDMS == -22) {
-//				FdmsVariable.setRequestAction("updateTxnCancelled");
-//				FdmsVariable.setAction("cancelled");
-//				updateTxn = new FdmsHttpRequest(FdmsApiFunction.this, context);
-//			} else {
-//				FdmsVariable.setRequestAction("updateTxnRejected");
-//				FdmsVariable.setAction("rejected");
-//				updateTxn = new FdmsHttpRequest(FdmsApiFunction.this, context);
-//			}
-//
-//			updateTxn.execute();
-//			// Continue to FdmsHttpRequest.java
-//		}
+			FdmsHttpReq updateTxn = new FdmsHttpReq(new FdmsAsyncResponse() {
+				@Override
+				public void processFinish(String output) {
+					Fdresponse.getResponse(output);
+				}
+			}, fdmsVariable, FdmsApiFunction.this, context);
+
+			if (saleResCodeFDMS == 0) {
+				// Success Transaction
+
+				while (batchNo.length() < 6) {
+					batchNo = "0" + batchNo;
+				}
+
+				while (invoiceNo.length() < 6) {
+					invoiceNo = "0" + invoiceNo;
+				}
+
+				while (traceNo.length() < 6) {
+					traceNo = "0" + traceNo;
+				}
+
+				// Remove cardNo space
+				cardNo = cardNo.replaceAll(" ", "");
+
+				if (payMethod.equalsIgnoreCase("MASTER")) {
+					payMethod = "Master";
+				}
+
+				// 'requestAction' used for send request in 'FdmsHttpRequest'
+				fdmsVariable.setRequestAction("updateTxnAccepted");
+				fdmsVariable.setAction("accepted");
+				fdmsVariable.setInvoiceNo(invoiceNo);
+				fdmsVariable.setCardNo(cardNo);
+				fdmsVariable.setRRN(RRN);
+				fdmsVariable.setBatchNo(batchNo);
+				fdmsVariable.setTraceNo(traceNo);
+				fdmsVariable.setPayMethod(payMethod);
+				fdmsVariable.setAppCode(appCode);
+				fdmsVariable.setTc(tc);
+				fdmsVariable.setTsi(tsi);
+				fdmsVariable.setAtc(atc);
+				fdmsVariable.setTvr(tvr);
+				fdmsVariable.setAppName(appName);
+				fdmsVariable.setAid(aid);
+
+				updateTxn.execute();
+				// Continue to FdmsHttpReq.java
+
+			} else {
+				fdmsVariable.setPayMethod("Card");
+				//FdmsVariable.setCardNo("");
+
+				if (saleResCodeFDMS == -22) {
+					fdmsVariable.setRequestAction("updateTxnCancelled");
+					fdmsVariable.setAction("cancelled");
+
+				} else {
+					fdmsVariable.setRequestAction("updateTxnRejected");
+					fdmsVariable.setAction("rejected");
+				}
+
+				updateTxn.execute();
+				// Continue to FdmsHttpRequest.java
+			}
+		}
 	}
 
-//	public void voidResponse(int requestCode, int resultCode, Intent data) {
-//		System.out.println("requestCode: " + requestCode);
-//		System.out.println("resultCode: " + resultCode);
-//		System.out.println("data: " + data);
-//
-//		//VoidMsg.Response response = (VoidMsg.Response) transAPI.onResult(requestCode, resultCode, data);
-//		// Printout Intent value
-//		if (data != null) {
-//			Bundle bundle = data.getExtras();
-//			if (bundle != null) {
-//				Set<String> keys = bundle.keySet();
-//				Iterator<String> it = keys.iterator();
-//				System.out.println("Intent value start");
-//				while (it.hasNext()) {
-//					String key = it.next();
-//					System.out.println("[" + key + "=" + bundle.get(key) + "]");
-//				}
-//				System.out.println("Intent value end");
-//			}
-//		}
-//
-//		// Printout Intent value
-//		if (data != null) {
-//			Bundle bundle = data.getExtras();
-//			if (bundle != null) {
-//				Set<String> keys = bundle.keySet();
-//				Iterator<String> it = keys.iterator();
-//				while (it.hasNext()) {
-//					String key = it.next();
-//					if (key.equalsIgnoreCase("_fdms_response_code")) {
-//						voidResCodeFDMS = parseInt(bundle.get(key).toString());
-//					} else if (key.equalsIgnoreCase("_fdms_response_invoice_no")) {
-//						invoiceNo = bundle.get(key).toString();
-//					} else if (key.equalsIgnoreCase("_fdms_response_trace_no")) {
-//						traceNo = bundle.get(key).toString();
-//					}
-//				}
-//			}
-//		}
-//
-//		if (voidResCodeFDMS == 0) {
-//			while (invoiceNo.length() < 6) {
-//				invoiceNo = "0" + invoiceNo;
-//			}
-//
-//			while (traceNo.length() < 6) {
-//				traceNo = "0" + traceNo;
-//			}
-//
-//			System.out.println("FDMS Void Success");
-//			System.out.println("Payment Ref: " + payRef);
-//			FdmsVariable.setRequestAction("voidTxn");
-//			FdmsVariable.setAction("Void");
-//			FdmsVariable.setInvoiceNo(invoiceNo);
-//			FdmsVariable.setTraceNo(traceNo);
-//
-//			FdmsHttpRequest voidTxn = new FdmsHttpRequest(FdmsApiFunction.this, context);
-//
-//			voidTxn.execute();
-//			// Continue to FdmsHttpRequest.java
-//		} else {
-//			System.out.println("FDMS Void Failed");
-//			System.out.println("Payment Ref: " + payRef);
-//		}
-//	}
+	public void voidResponse(int requestCode, int resultCode, Intent data) {
+		System.out.println("requestCode: " + requestCode);
+		System.out.println("resultCode: " + resultCode);
+		System.out.println("data: " + data);
 
-//	public void settlementResponse(int requestCode, int resultCode, Intent data, ArrayList<String> payRefArray) {
-//		System.out.println("requestCode: " + requestCode);
-//		System.out.println("resultCode: " + resultCode);
-//		System.out.println("data: " + data);
-//
-//		System.out.print("payRefArray payRefArray: " + payRefArray);
-//
-//		// Printout Intent value
-//		if (data != null) {
-//			Bundle bundle = data.getExtras();
-//			if (bundle != null) {
-//				Set<String> keys = bundle.keySet();
-//				Iterator<String> it = keys.iterator();
-//				System.out.println("Intent value start");
-//				while (it.hasNext()) {
-//					String key = it.next();
-//					System.out.println("[" + key + "=" + bundle.get(key) + "]");
-//				}
-//				System.out.println("Intent value end");
-//			}
-//		}
-//
-//		// Printout Intent value
-//		if (data != null) {
-//			Bundle bundle = data.getExtras();
-//			if (bundle != null) {
-//				Set<String> keys = bundle.keySet();
-//				Iterator<String> it = keys.iterator();
-//				while (it.hasNext()) {
-//					String key = it.next();
-//					if (key.equalsIgnoreCase("_fdms_response_code")) {
-//						settleResCodeFDMS = parseInt(bundle.get(key).toString());
-//						break;
-//					}
-//				}
-//			}
-//		}
-//
-//		if (settleResCodeFDMS == 0) {
-//			System.out.println("FDMS Settlement Success");
-//			System.out.println("Payment Ref Array: " + payRefArray);
-//			FdmsVariable.setRequestAction("settlementTxn");
-//			FdmsVariable.setAction("settlement");
-//			FdmsVariable.setPayRefArray(payRefArray.toString());
-//
-//			FdmsHttpRequest settlementTxn = new FdmsHttpRequest(FdmsApiFunction.this, context);
-//
-//			settlementTxn.execute();
-//			// Continue to FdmsHttpRequest.java
-//
-//		} else {
-//			System.out.println("FDMS Settlement Failed");
-//			System.out.println("Payment Ref Array: " + payRefArray);
-//			FdmsVariable.setRequestAction("settlementTxnFailed");
-//
+		//VoidMsg.Response response = (VoidMsg.Response) transAPI.onResult(requestCode, resultCode, data);
+		// Printout Intent value
+		if (data != null) {
+			Bundle bundle = data.getExtras();
+			if (bundle != null) {
+				Set<String> keys = bundle.keySet();
+				Iterator<String> it = keys.iterator();
+				System.out.println("Intent value start");
+				while (it.hasNext()) {
+					String key = it.next();
+					System.out.println("[" + key + "=" + bundle.get(key) + "]");
+				}
+				System.out.println("Intent value end");
+			}
+		}
+
+		// Printout Intent value
+		if (data != null) {
+			Bundle bundle = data.getExtras();
+			if (bundle != null) {
+				Set<String> keys = bundle.keySet();
+				Iterator<String> it = keys.iterator();
+				while (it.hasNext()) {
+					String key = it.next();
+					if (key.equalsIgnoreCase("_fdms_response_code")) {
+						voidResCodeFDMS = parseInt(bundle.get(key).toString());
+					} else if (key.equalsIgnoreCase("_fdms_response_invoice_no")) {
+						invoiceNo = bundle.get(key).toString();
+					} else if (key.equalsIgnoreCase("_fdms_response_trace_no")) {
+						traceNo = bundle.get(key).toString();
+					}
+				}
+			}
+		}
+
+		if (voidResCodeFDMS == 0) {
+			while (invoiceNo.length() < 6) {
+				invoiceNo = "0" + invoiceNo;
+			}
+
+			while (traceNo.length() < 6) {
+				traceNo = "0" + traceNo;
+			}
+
+			System.out.println("FDMS Void Success");
+			System.out.println("Payment Ref: " + payRef);
+
+			FdmsVariable fdmsVariable = new FdmsVariable();
+			fdmsVariable.setRequestAction("voidTxn");
+			fdmsVariable.setAction("Void");
+			fdmsVariable.setInvoiceNo(invoiceNo);
+			fdmsVariable.setTraceNo(traceNo);
+			fdmsVariable.setUserID("apiuser");
+			fdmsVariable.setPassword("api1234");
+
+			FdmsHttpReq voidTxn = new FdmsHttpReq(new FdmsAsyncResponse() {
+				@Override
+				public void processFinish(String output) {
+					Fdresponse.getResponse(output);
+				}
+			}, fdmsVariable, FdmsApiFunction.this, context);
+			voidTxn.execute();
+			// Continue to FdmsHttpRequest.java
+		} else {
+			System.out.println("FDMS Void Failed");
+			System.out.println("Payment Ref: " + payRef);
+		}
+	}
+
+	public void settlementResponse(int requestCode, int resultCode, Intent data, ArrayList<String> payRefArray) {
+		System.out.println("requestCode: " + requestCode);
+		System.out.println("resultCode: " + resultCode);
+		System.out.println("data: " + data);
+
+		System.out.print("payRefArray payRefArray: " + payRefArray);
+
+		// Printout Intent value
+		if (data != null) {
+			Bundle bundle = data.getExtras();
+			if (bundle != null) {
+				Set<String> keys = bundle.keySet();
+				Iterator<String> it = keys.iterator();
+				System.out.println("Intent value start");
+				while (it.hasNext()) {
+					String key = it.next();
+					System.out.println("[" + key + "=" + bundle.get(key) + "]");
+				}
+				System.out.println("Intent value end");
+			}
+		}
+
+		// Printout Intent value
+		if (data != null) {
+			Bundle bundle = data.getExtras();
+			if (bundle != null) {
+				Set<String> keys = bundle.keySet();
+				Iterator<String> it = keys.iterator();
+				while (it.hasNext()) {
+					String key = it.next();
+					if (key.equalsIgnoreCase("_fdms_response_code")) {
+						settleResCodeFDMS = parseInt(bundle.get(key).toString());
+						break;
+					}
+				}
+			}
+		}
+
+		if (settleResCodeFDMS == 0) {
+			System.out.println("FDMS Settlement Success");
+			System.out.println("Payment Ref Array: " + payRefArray);
+
+			FdmsVariable fdmsVariable = new FdmsVariable();
+			fdmsVariable.setRequestAction("settlementTxn");
+			fdmsVariable.setAction("settlement");
+			fdmsVariable.setPayRefArray(payRefArray.toString());
+
+			FdmsHttpReq settlementTxn = new FdmsHttpReq(new FdmsAsyncResponse() {
+				@Override
+				public void processFinish(String output) {
+					Fdresponse.getResponse(output);
+				}
+			}, fdmsVariable, FdmsApiFunction.this, context);
+			settlementTxn.execute();
+			// Continue to FdmsHttpRequest.java
+
+		} else {
+			System.out.println("FDMS Settlement Failed");
+			System.out.println("Payment Ref Array: " + payRefArray);
+
+//			fdmsVariable.setRequestAction("settlementTxnFailed");
+
 //			GlobalFunction.disablePaxNavigationButton(context);
-//		}
-//	}
-
-
+		}
+	}
 }

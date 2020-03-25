@@ -1,5 +1,6 @@
 package com.example.spos_sdk2;
 
+import android.app.Activity;
 import android.util.Log;
 
 public class CancelRequest {
@@ -9,6 +10,11 @@ public class CancelRequest {
     CancelData cancelData;
     CancelResponse response;
     ErrorResult errorResult = new ErrorResult();
+    Activity activity;
+
+    public CancelRequest(Activity activity){
+        this.activity = activity;
+    }
 
     public void setCancelData(CancelData data){
         this.cancelData = data;
@@ -30,7 +36,7 @@ public class CancelRequest {
                     CancelCall req = new CancelCall();
                     final CancelResult result = req.callCancelAPI(cancelData);
 
-                    cancelData.getActivity().runOnUiThread(new Runnable() {
+                    activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             response.getResponse(result);
@@ -41,7 +47,7 @@ public class CancelRequest {
 
                     Log.d(CANCEL_TAG, "request onError");
 
-                    cancelData.getActivity().runOnUiThread(new Runnable() {
+                    activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             response.onError(errorResult);
@@ -74,9 +80,6 @@ public class CancelRequest {
         } else if(cancelData.getPayGate() == null){
             errorResult.setErrCode(ErrorCode.ERR_PAYGATE);
             errorResult.setErrMessage("Please add the paygate.");
-        } else if (cancelData.getActivity() == null) {
-            errorResult.setErrCode(ErrorCode.ERR_ACTIVITY);
-            errorResult.setErrMessage("Please add the activity");
         } else {
             isDataValid = true;
         }

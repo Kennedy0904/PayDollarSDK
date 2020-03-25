@@ -1,577 +1,575 @@
 package com.example.spos_sdk2.FDMS;
 
-public class FdmsVariable {
-	public static String cardNo;
-	public static String ProcessingCode = "";
-	public static String amount;
-	public static String merRef;
-	public static String POSEntryMode = "";
-	public static String PANSeqNo = "";
-	public static String POSCondtionCode = "";
-	public static String Track2Data = "";
-	public static String EnryptedPIN = "";
-	public static String EMVICCRelatedData = "";
-	public static String InvoiceRef = "";
-	public static String merId;
-	public static String merName;
-	public static String currCode;
-	public static String merRequestAmt = "";
-	public static String surcharge;
-	public static String payType;
-	public static String pMethod;
-	public static String cardHolder;
-	public static String epMonth;
-	public static String epYear;
-	public static String CVV2Data = "";
-	public static String operatorId = "";
-	public static String channel;
-	public static String hideSurcharge = "";
-	public static String appCode;
-	public static String tc;
-	public static String tsi;
-	public static String atc;
-	public static String tvr;
-	public static String appName;
-	public static String aid;
-	public static String action;
-	public static String invoiceNo;
-	public static String RRN;
-	public static String batchNo;
-	public static String traceNo;
-	public static String payMethod;
-	public static String URL;
-	public static String payGate;
-	public static String requestAction;
-	public static String result = "";
-	public static String user;
-	public static String password;
-	public static String userID;
-	public static int responseCode = 0;
-	public static String payRef;
-	public static String updateTxnCode;
-	public static String voidTxnCode;
-	public static String settleTxnCode;
-	public static String settle;
-	public static String payBankId;
-	public static String status;
-	public static String errCode;
-	public static String returnMsg;
-	public static String txnTime;
-	public static String bankRef;
-	public static String payRefArray;
-	public static String terminalId;
-	public static String errMsg;
+import com.example.spos_sdk2.EnvBase;
 
-	public static String getErrMsg() {
+public class FdmsVariable {
+
+	public String cardNo;
+	public String ProcessingCode = "";
+	public String amount;
+	public String merRef;
+	public String POSEntryMode = "";
+	public String PANSeqNo = "";
+	public String POSCondtionCode = "";
+	public String Track2Data = "";
+	public String EnryptedPIN = "";
+	public String EMVICCRelatedData = "";
+	public String InvoiceRef = "";
+	public String merId;
+	public String merName;
+	public String currCode;
+	public String merRequestAmt = "";
+	public String surcharge;
+	public String payType;
+	public String pMethod;
+	public String cardHolder;
+	public String epMonth;
+	public String epYear;
+	public String CVV2Data = "";
+	public String operatorId = "";
+	public String channel;
+	public String hideSurcharge = "";
+	public String appCode;
+	public String tc;
+	public String tsi;
+	public String atc;
+	public String tvr;
+	public String appName;
+	public String aid;
+	public String action;
+	public String invoiceNo;
+	public String RRN;
+	public String batchNo;
+	public String traceNo;
+	public String payMethod;
+	public String URL;
+	public String requestAction;
+	public String result = "";
+	public String user;
+	public String password;
+	public String userID;
+	public int responseCode = 0;
+	public String payRef;
+	public String updateTxnCode;
+	public String voidTxnCode;
+	public String settleTxnCode;
+	public String settle;
+	public String payBankId;
+	public String status;
+	public String errCode;
+	public String returnMsg;
+	public String txnTime;
+	public String bankRef;
+	public String payRefArray;
+	public String terminalId;
+	public String currName;
+	public String remark;
+	public String errMsg;
+	public EnvBase.PayGate payGate;
+
+	public String getErrMsg() {
 		return errMsg;
 	}
 
-	public static void setErrMsg(String errMsg) {
-		FdmsVariable.errMsg = errMsg;
+	public void setErrMsg(String errMsg) {
+		this.errMsg = errMsg;
 	}
 
-	public static String getTerminalId() {
+	public String getTerminalId() {
 		return terminalId;
 	}
 
-	public static void setTerminalId(String terminalId) {
-		FdmsVariable.terminalId = terminalId;
+	public void setTerminalId(String terminalId) {
+		this.terminalId = terminalId;
 	}
 
-	public static String getPayRefArray() {
+	public String getPayRefArray() {
 		return payRefArray;
 	}
 
-	public static void setPayRefArray(String payRefArray) {
-		FdmsVariable.payRefArray = payRefArray;
+	public void setPayRefArray(String payRefArray) {
+		this.payRefArray = payRefArray;
 	}
 
-	public static String getSettle() {
+	public String getSettle() {
 		return settle;
 	}
 
-	public static void setSettle(String settle) {
-		FdmsVariable.settle = settle;
+	public void setSettle(String settle) {
+		this.settle = settle;
 	}
 
-	public static String getPayBankId() {
+	public String getPayBankId() {
 		return payBankId;
 	}
 
-	public static void setPayBankId(String payBankId) {
-		FdmsVariable.payBankId = payBankId;
+	public void setPayBankId(String payBankId) {
+		this.payBankId = payBankId;
 	}
 
-	public static String getSettleTxnCode() {
+	public String getSettleTxnCode() {
 		return settleTxnCode;
 	}
 
-	public static void setSettleTxnCode(String settleTxnCode) {
-		FdmsVariable.settleTxnCode = settleTxnCode;
+	public void setSettleTxnCode(String settleTxnCode) {
+		this.settleTxnCode = settleTxnCode;
 	}
 
-	public static String getVoidTxnCode() {
+	public String getVoidTxnCode() {
 		return voidTxnCode;
 	}
 
-	public static void setVoidTxnCode(String voidTxnCode) {
-		FdmsVariable.voidTxnCode = voidTxnCode;
+	public void setVoidTxnCode(String voidTxnCode) {
+		this.voidTxnCode =voidTxnCode;
 	}
 
-	public static String getErrCode() {
+	public String getErrCode() {
 		return errCode;
 	}
 
-	public static void setErrCode(String errCode) {
-		FdmsVariable.errCode = errCode;
+	public void setErrCode(String errCode) {
+		this.errCode = errCode;
 	}
 
-	public static String getReturnMsg() {
+	public String getReturnMsg() {
 		return returnMsg;
 	}
 
-	public static void setReturnMsg(String returnMsg) {
-		FdmsVariable.returnMsg = returnMsg;
+	public void setReturnMsg(String returnMsg) {
+		this.returnMsg = returnMsg;
 	}
 
-	public static String getTxnTime() {
+	public String getTxnTime() {
 		return txnTime;
 	}
 
-	public static void setTxnTime(String txnTime) {
-		FdmsVariable.txnTime = txnTime;
+	public void setTxnTime(String txnTime) {
+		this.txnTime = txnTime;
 	}
 
-	public static String getBankRef() {
+	public String getBankRef() {
 		return bankRef;
 	}
 
-	public static void setBankRef(String bankRef) {
-		FdmsVariable.bankRef = bankRef;
+	public void setBankRef(String bankRef) {
+		this.bankRef = bankRef;
 	}
 
-	public static String getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public static void setStatus(String status) {
-		FdmsVariable.status = status;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
-	public static String getUpdateTxnCode() {
+	public String getUpdateTxnCode() {
 		return updateTxnCode;
 	}
 
-	public static void setUpdateTxnCode(String updateTxnCode) {
-		FdmsVariable.updateTxnCode = updateTxnCode;
+	public void setUpdateTxnCode(String updateTxnCode) {
+		this.updateTxnCode = updateTxnCode;
 	}
 
-	public static String getPayRef() {
+	public String getPayRef() {
 		return payRef;
 	}
 
-	public static void setPayRef(String payRef) {
-		FdmsVariable.payRef = payRef;
+	public void setPayRef(String payRef) {
+		this.payRef = payRef;
 	}
 
-	public static String getCreateTxnCode() {
+	public String getCreateTxnCode() {
 		return createTxnCode;
 	}
 
-	public static void setCreateTxnCode(String createTxnCode) {
-		FdmsVariable.createTxnCode = createTxnCode;
+	public void setCreateTxnCode(String createTxnCode) {
+		this.createTxnCode = createTxnCode;
 	}
 
-	public static String createTxnCode;
+	public String createTxnCode;
 
-	public static String getCurrName() {
+	public String getCurrName() {
 		return currName;
 	}
 
-	public static void setCurrName(String currName) {
-		FdmsVariable.currName = currName;
+	public void setCurrName(String currName) {
+		this.currName = currName;
 	}
 
-	public static String getRemark() {
+	public String getRemark() {
 		return remark;
 	}
 
-	public static void setRemark(String remark) {
-		FdmsVariable.remark = remark;
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 
-	public static String currName;
-	public static String remark;
-
-	public static String getCardNo() {
+	public String getCardNo() {
 		return cardNo;
 	}
 
-	public static void setCardNo(String cardNo) {
-		FdmsVariable.cardNo = cardNo;
+	public void setCardNo(String cardNo) {
+		this.cardNo = cardNo;
 	}
 
-	public static String getProcessingCode() {
+	public String getProcessingCode() {
 		return ProcessingCode;
 	}
 
-	public static void setProcessingCode(String processingCode) {
+	public void setProcessingCode(String processingCode) {
 		ProcessingCode = processingCode;
 	}
 
-	public static String getAmount() {
+	public String getAmount() {
 		return amount;
 	}
 
-	public static void setAmount(String amount) {
-		FdmsVariable.amount = amount;
+	public void setAmount(String amount) {
+		this.amount = amount;
 	}
 
-	public static String getMerRef() {
+	public String getMerRef() {
 		return merRef;
 	}
 
-	public static void setMerRef(String merRef) {
-		FdmsVariable.merRef = merRef;
+	public void setMerRef(String merRef) {
+		this.merRef = merRef;
 	}
 
-	public static String getPOSEntryMode() {
+	public String getPOSEntryMode() {
 		return POSEntryMode;
 	}
 
-	public static void setPOSEntryMode(String POSEntryMode) {
-		FdmsVariable.POSEntryMode = POSEntryMode;
+	public void setPOSEntryMode(String POSEntryMode) {
+		this.POSEntryMode = POSEntryMode;
 	}
 
-	public static String getPANSeqNo() {
+	public String getPANSeqNo() {
 		return PANSeqNo;
 	}
 
-	public static void setPANSeqNo(String PANSeqNo) {
-		FdmsVariable.PANSeqNo = PANSeqNo;
+	public void setPANSeqNo(String PANSeqNo) {
+		this.PANSeqNo = PANSeqNo;
 	}
 
-	public static String getPOSCondtionCode() {
+	public String getPOSCondtionCode() {
 		return POSCondtionCode;
 	}
 
-	public static void setPOSCondtionCode(String POSCondtionCode) {
-		FdmsVariable.POSCondtionCode = POSCondtionCode;
+	public void setPOSCondtionCode(String POSCondtionCode) {
+		this.POSCondtionCode = POSCondtionCode;
 	}
 
-	public static String getTrack2Data() {
+	public String getTrack2Data() {
 		return Track2Data;
 	}
 
-	public static void setTrack2Data(String track2Data) {
+	public void setTrack2Data(String track2Data) {
 		Track2Data = track2Data;
 	}
 
-	public static String getEnryptedPIN() {
+	public String getEnryptedPIN() {
 		return EnryptedPIN;
 	}
 
-	public static void setEnryptedPIN(String enryptedPIN) {
+	public void setEnryptedPIN(String enryptedPIN) {
 		EnryptedPIN = enryptedPIN;
 	}
 
-	public static String getEMVICCRelatedData() {
+	public String getEMVICCRelatedData() {
 		return EMVICCRelatedData;
 	}
 
-	public static void setEMVICCRelatedData(String EMVICCRelatedData) {
-		FdmsVariable.EMVICCRelatedData = EMVICCRelatedData;
+	public void setEMVICCRelatedData(String EMVICCRelatedData) {
+		this.EMVICCRelatedData = EMVICCRelatedData;
 	}
 
-	public static String getInvoiceRef() {
+	public String getInvoiceRef() {
 		return InvoiceRef;
 	}
 
-	public static void setInvoiceRef(String invoiceRef) {
+	public void setInvoiceRef(String invoiceRef) {
 		InvoiceRef = invoiceRef;
 	}
 
-	public static String getMerId() {
+	public String getMerId() {
 		return merId;
 	}
 
-	public static void setMerId(String merId) {
-		FdmsVariable.merId = merId;
+	public void setMerId(String merId) {
+		this.merId = merId;
 	}
 
-	public static String getMerName() {
+	public String getMerName() {
 		return merName;
 	}
 
-	public static void setMerName(String merName) {
-		FdmsVariable.merName = merName;
+	public void setMerName(String merName) {
+		this.merName = merName;
 	}
 
-	public static String getCurrCode() {
+	public String getCurrCode() {
 		return currCode;
 	}
 
-	public static void setCurrCode(String currCode) {
-		FdmsVariable.currCode = currCode;
+	public void setCurrCode(String currCode) {
+		this.currCode = currCode;
 	}
 
-	public static String getMerRequestAmt() {
+	public String getMerRequestAmt() {
 		return merRequestAmt;
 	}
 
-	public static void setMerRequestAmt(String merRequestAmt) {
-		FdmsVariable.merRequestAmt = merRequestAmt;
+	public void setMerRequestAmt(String merRequestAmt) {
+		this.merRequestAmt = merRequestAmt;
 	}
 
-	public static String getSurcharge() {
+	public String getSurcharge() {
 		return surcharge;
 	}
 
-	public static void setSurcharge(String surcharge) {
-		FdmsVariable.surcharge = surcharge;
+	public void setSurcharge(String surcharge) {
+		this.surcharge = surcharge;
 	}
 
-	public static String getPayType() {
+	public String getPayType() {
 		return payType;
 	}
 
-	public static void setPayType(String payType) {
-		FdmsVariable.payType = payType;
+	public void setPayType(String payType) {
+		this.payType = payType;
 	}
 
-	public static String getpMethod() {
+	public String getpMethod() {
 		return pMethod;
 	}
 
-	public static void setpMethod(String pMethod) {
-		FdmsVariable.pMethod = pMethod;
+	public void setpMethod(String pMethod) {
+		this.pMethod = pMethod;
 	}
 
-	public static String getCardHolder() {
+	public String getCardHolder() {
 		return cardHolder;
 	}
 
-	public static void setCardHolder(String cardHolder) {
-		FdmsVariable.cardHolder = cardHolder;
+	public void setCardHolder(String cardHolder) {
+		this.cardHolder = cardHolder;
 	}
 
-	public static String getEpMonth() {
+	public String getEpMonth() {
 		return epMonth;
 	}
 
-	public static void setEpMonth(String epMonth) {
-		FdmsVariable.epMonth = epMonth;
+	public void setEpMonth(String epMonth) {
+		this.epMonth = epMonth;
 	}
 
-	public static String getEpYear() {
+	public String getEpYear() {
 		return epYear;
 	}
 
-	public static void setEpYear(String epYear) {
-		FdmsVariable.epYear = epYear;
+	public void setEpYear(String epYear) {
+		this.epYear = epYear;
 	}
 
-	public static String getCVV2Data() {
+	public String getCVV2Data() {
 		return CVV2Data;
 	}
 
-	public static void setCVV2Data(String CVV2Data) {
-		FdmsVariable.CVV2Data = CVV2Data;
+	public void setCVV2Data(String CVV2Data) {
+		this.CVV2Data = CVV2Data;
 	}
 
-	public static String getOperatorId() {
+	public String getOperatorId() {
 		return operatorId;
 	}
 
-	public static void setOperatorId(String operatorId) {
-		FdmsVariable.operatorId = operatorId;
+	public void setOperatorId(String operatorId) {
+		this.operatorId = operatorId;
 	}
 
-	public static String getChannel() {
+	public String getChannel() {
 		return channel;
 	}
 
-	public static void setChannel(String channel) {
-		FdmsVariable.channel = channel;
+	public void setChannel(String channel) {
+		this.channel = channel;
 	}
 
-	public static String getHideSurcharge() {
+	public String getHideSurcharge() {
 		return hideSurcharge;
 	}
 
-	public static void setHideSurcharge(String hideSurcharge) {
-		FdmsVariable.hideSurcharge = hideSurcharge;
+	public void setHideSurcharge(String hideSurcharge) {
+		this.hideSurcharge = hideSurcharge;
 	}
 
-	public static String getAppCode() {
+	public String getAppCode() {
 		return appCode;
 	}
 
-	public static void setAppCode(String appCode) {
-		FdmsVariable.appCode = appCode;
+	public void setAppCode(String appCode) {
+		this.appCode = appCode;
 	}
 
-	public static String getTc() {
+	public String getTc() {
 		return tc;
 	}
 
-	public static void setTc(String tc) {
-		FdmsVariable.tc = tc;
+	public void setTc(String tc) {
+		this.tc = tc;
 	}
 
-	public static String getTsi() {
+	public String getTsi() {
 		return tsi;
 	}
 
-	public static void setTsi(String tsi) {
-		FdmsVariable.tsi = tsi;
+	public void setTsi(String tsi) {
+		this.tsi = tsi;
 	}
 
-	public static String getAtc() {
+	public String getAtc() {
 		return atc;
 	}
 
-	public static void setAtc(String atc) {
-		FdmsVariable.atc = atc;
+	public void setAtc(String atc) {
+		this.atc = atc;
 	}
 
-	public static String getTvr() {
+	public String getTvr() {
 		return tvr;
 	}
 
-	public static void setTvr(String tvr) {
-		FdmsVariable.tvr = tvr;
+	public void setTvr(String tvr) {
+		this.tvr = tvr;
 	}
 
-	public static String getAppName() {
+	public String getAppName() {
 		return appName;
 	}
 
-	public static void setAppName(String appName) {
-		FdmsVariable.appName = appName;
+	public void setAppName(String appName) {
+		this.appName = appName;
 	}
 
-	public static String getAid() {
+	public String getAid() {
 		return aid;
 	}
 
-	public static void setAid(String aid) {
-		FdmsVariable.aid = aid;
+	public void setAid(String aid) {
+		this.aid = aid;
 	}
 
-	public static String getAction() {
+	public String getAction() {
 		return action;
 	}
 
-	public static void setAction(String action) {
-		FdmsVariable.action = action;
+	public void setAction(String action) {
+		this.action = action;
 	}
 
-	public static String getInvoiceNo() {
+	public String getInvoiceNo() {
 		return invoiceNo;
 	}
 
-	public static void setInvoiceNo(String invoiceNo) {
-		FdmsVariable.invoiceNo = invoiceNo;
+	public void setInvoiceNo(String invoiceNo) {
+		this.invoiceNo = invoiceNo;
 	}
 
-	public static String getRRN() {
+	public String getRRN() {
 		return RRN;
 	}
 
-	public static void setRRN(String RRN) {
-		FdmsVariable.RRN = RRN;
+	public void setRRN(String RRN) {
+		this.RRN = RRN;
 	}
 
-	public static String getBatchNo() {
+	public String getBatchNo() {
 		return batchNo;
 	}
 
-	public static void setBatchNo(String batchNo) {
-		FdmsVariable.batchNo = batchNo;
+	public void setBatchNo(String batchNo) {
+		this.batchNo = batchNo;
 	}
 
-	public static String getTraceNo() {
+	public String getTraceNo() {
 		return traceNo;
 	}
 
-	public static void setTraceNo(String traceNo) {
-		FdmsVariable.traceNo = traceNo;
+	public void setTraceNo(String traceNo) {
+		this.traceNo = traceNo;
 	}
 
-	public static String getPayMethod() {
+	public String getPayMethod() {
 		return payMethod;
 	}
 
-	public static void setPayMethod(String payMethod) {
-		FdmsVariable.payMethod = payMethod;
+	public void setPayMethod(String payMethod) {
+		this.payMethod = payMethod;
 	}
 
-	public static String getURL() {
+	public String getURL() {
 		return URL;
 	}
 
-	public static void setURL(String URL) {
-		FdmsVariable.URL = URL;
+	public void setURL(String URL) {
+		this.URL = URL;
 	}
 
-	public static String getPayGate() {
-		return payGate;
-	}
-
-	public static void setPayGate(String payGate) {
-		FdmsVariable.payGate = payGate;
-	}
-
-	public static String getRequestAction() {
+	public String getRequestAction() {
 		return requestAction;
 	}
 
-	public static void setRequestAction(String requestAction) {
-		FdmsVariable.requestAction = requestAction;
+	public void setRequestAction(String requestAction) {
+		this.requestAction = requestAction;
 	}
 
-	public static String getResult() {
+	public String getResult() {
 		return result;
 	}
 
-	public static void setResult(String result) {
-		FdmsVariable.result = result;
+	public void setResult(String result) {
+		this.result = result;
 	}
 
-	public static String getUser() {
+	public String getUser() {
 		return user;
 	}
 
-	public static void setUser(String user) {
-		FdmsVariable.user = user;
+	public void setUser(String user) {
+		this.user = user;
 	}
 
-	public static String getPassword() {
+	public String getPassword() {
 		return password;
 	}
 
-	public static void setPassword(String password) {
-		FdmsVariable.password = password;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
-	public static String getUserID() {
+	public String getUserID() {
 		return userID;
 	}
 
-	public static void setUserID(String userID) {
-		FdmsVariable.userID = userID;
+	public void setUserID(String userID) {
+		this.userID = userID;
 	}
 
-	public static int getResponseCode() {
+	public  int getResponseCode() {
 		return responseCode;
 	}
 
-	public static void setResponseCode(int responseCode) {
-		FdmsVariable.responseCode = responseCode;
+	public void setResponseCode(int responseCode) {
+		this.responseCode = responseCode;
 	}
 
+	public  EnvBase.PayGate getPayGate() {
+		return payGate;
+	}
 
-
-
+	public void setPayGate(EnvBase.PayGate payGate) {
+		this.payGate = payGate;
+	}
 }

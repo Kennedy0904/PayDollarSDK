@@ -8,7 +8,6 @@ public class CancelData {
     private String payRef;
     private EnvBase.PayMethod pMethod;
     private EnvBase.PayGate payGate;
-    private Activity activity;
     private String currCode;
 
     public String getMerchantId() {
@@ -41,14 +40,6 @@ public class CancelData {
 
     public void setPayGate(EnvBase.PayGate payGate) {
         this.payGate = payGate;
-    }
-
-    public Activity getActivity() {
-        return activity;
-    }
-
-    public void setActivity(Activity activity) {
-        this.activity = activity;
     }
 
     public String getCurrCode() {

@@ -8,7 +8,6 @@ public class LoginData {
     String userId;
     String password;
     EnvBase.PayGate payGate;
-    Activity activity;
 
     public String getMerchantId() {
         return merchantId;
@@ -40,13 +39,5 @@ public class LoginData {
 
     public void setPayGate(EnvBase.PayGate payGate) {
         this.payGate = payGate;
-    }
-
-    public Activity getActivity() {
-        return activity;
-    }
-
-    public void setActivity(Activity activity) {
-        this.activity = activity;
     }
 }

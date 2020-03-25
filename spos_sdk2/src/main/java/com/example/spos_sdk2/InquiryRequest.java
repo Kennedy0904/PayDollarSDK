@@ -1,5 +1,6 @@
 package com.example.spos_sdk2;
 
+import android.app.Activity;
 import android.util.Log;
 
 public class InquiryRequest {
@@ -7,9 +8,13 @@ public class InquiryRequest {
     protected static final String INQUIRY_TAG = "InquiryReq";
 
     InquiryData inquiryData;
-
-    ErrorResult errorResult = new ErrorResult();
     InquiryResponse response;
+    ErrorResult errorResult = new ErrorResult();
+    Activity activity;
+
+    public InquiryRequest(Activity activity){
+        this.activity = activity;
+    }
 
     public void setInquiryData(InquiryData inquiryData){
         this.inquiryData = inquiryData;
@@ -30,7 +35,7 @@ public class InquiryRequest {
                     InquiryCall req = new InquiryCall();
                     final InquiryResult result = req.callInquiryAPI(inquiryData);
 
-                    inquiryData.getActivity().runOnUiThread(new Runnable() {
+                    activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             response.getResponse(result);
@@ -41,7 +46,7 @@ public class InquiryRequest {
 
                     Log.d(INQUIRY_TAG, "request onError");
 
-                    inquiryData.getActivity().runOnUiThread(new Runnable() {
+                    activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             response.onError(errorResult);
@@ -74,9 +79,6 @@ public class InquiryRequest {
         } else if(inquiryData.getPayGate() == null){
             errorResult.setErrCode(ErrorCode.ERR_PAYGATE);
             errorResult.setErrMessage("Please add the paygate.");
-        } else if (inquiryData.getActivity() == null) {
-            errorResult.setErrCode(ErrorCode.ERR_ACTIVITY);
-            errorResult.setErrMessage("Please add the activity");
         } else {
             isDataValid = true;
         }

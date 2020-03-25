@@ -14,7 +14,6 @@ public class PayData {
     private EnvBase.PayType payType;
     private EnvBase.PayMethod pMethod;
     private EnvBase.PayGate payGate;
-    private Activity activity;
 
     public String getMerchantId() {
         return merchantId;
@@ -94,13 +93,5 @@ public class PayData {
 
     public void setPayGate(EnvBase.PayGate payGate) {
         this.payGate = payGate;
-    }
-
-    public Activity getActivity() {
-        return activity;
-    }
-
-    public void setActivity(Activity activity) {
-        this.activity = activity;
     }
 }

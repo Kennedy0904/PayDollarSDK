@@ -1,6 +1,6 @@
 package com.example.spos_sdk2;
 
-import android.content.Context;
+import android.app.Activity;
 import android.util.Log;
 
 public class LoginRequest {
@@ -8,27 +8,19 @@ public class LoginRequest {
     protected static final String LOGIN_TAG = "LoginReq";
 
     LoginData loginData;
-    Context context;
-
-    ErrorResult errorResult = new ErrorResult();
     LoginResponse response;
+    ErrorResult errorResult = new ErrorResult();
+    Activity activity;
 
-//    public LoginRequest(Context context) {
-//        try {
-//            this.context = context;
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-
-    public void setLoginData(LoginData loginData) {
-
-        this.loginData = loginData;
-        context = loginData.getActivity();
+    public LoginRequest(Activity activity) {
+        this.activity = activity;
     }
 
+    public void setLoginData(LoginData loginData) {
+        this.loginData = loginData;
+    }
+
+    /** Start Calling PayDollar*/
     public void process() {
 
         Thread payThread;
@@ -44,7 +36,7 @@ public class LoginRequest {
                     LoginCall pReq = new LoginCall();
                     final LoginResult result = pReq.callLoginAPI(loginData);
 
-                    loginData.getActivity().runOnUiThread(new Runnable() {
+                    activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                              response.getResponse(result);
@@ -54,7 +46,7 @@ public class LoginRequest {
 
                     Log.d(LOGIN_TAG, "request onError");
 
-                    loginData.getActivity().runOnUiThread(new Runnable() {
+                    activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             response.onError(errorResult);
@@ -94,10 +86,11 @@ public class LoginRequest {
 //                && !loginData.getPayGate().equals(EnvBase.PayGate.PESOPAY))){
 //                errorResult.setErrMessage("Invalid login channel.");
 //        }
-        else if (loginData.getActivity() == null) {
-            errorResult.setErrMessage("Please add the activity");
-            errorResult.setErrCode(ErrorCode.ERR_ACTIVITY);
-        } else {
+//        else if (loginData.getActivity() == null) {
+//            errorResult.setErrMessage("Please add the activity");
+//            errorResult.setErrCode(ErrorCode.ERR_ACTIVITY);
+//        }
+        else {
             isDataValid = true;
         }
 

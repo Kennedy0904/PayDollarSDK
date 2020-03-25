@@ -24,11 +24,8 @@ import static com.example.spos_sdk2.TxnResult.SUCCESS;
 public class TxnCall {
 
     String baseUrl = null;
-    Context context = null;
 
     TxnResult callVoidAPI(TxnData txnData){
-
-        context = txnData.getActivity();
 
         String result = "";
 
@@ -36,7 +33,7 @@ public class TxnCall {
         TxnResult txnResult = new TxnResult();
 
         try {
-            baseUrl = PayGate.getURL_orderAPI(txnData.getPayGate());
+            baseUrl = PayGate.getOrderAPIURL(txnData.getPayGate());
             URL url = new URL(baseUrl);
 
             HttpURLConnection con = (HttpURLConnection) url.openConnection();

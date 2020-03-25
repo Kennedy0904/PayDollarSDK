@@ -25,7 +25,7 @@ import static com.example.spos_sdk2.HistoryRequest.HISTORY_TAG;
 public class HistoryCall {
 
     ArrayList<Record> record_data = new ArrayList<Record>();
-    URL url = null;
+    private String baseUrl = null;
 
     String callHistoryAPI(HistoryData historyData){
 
@@ -34,7 +34,8 @@ public class HistoryCall {
         HashMap<String, String> map;
 
         try {
-            url = setHistoryURL(historyData.getPayGate());
+            baseUrl = PayGate.getHistoryURL(historyData.getPayGate());
+            URL url = new URL(baseUrl);
 //            url = new URL("https://test2.paydollar.com/b2cDemo/GenTransactionJSONSPOS");
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("POST");
@@ -156,23 +157,11 @@ public class HistoryCall {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
         Log.d(HISTORY_TAG, "Result: " + result);
 
         return result;
 //        return record_data;
-    }
-
-    private URL setHistoryURL(EnvBase.PayGate payGate) throws MalformedURLException {
-
-        if (payGate.equals(EnvBase.PayGate.PAYDOLLAR)) {
-            url = new URL(Constants.url_paydollar_genTxtXMLMPOS);
-        } else if (payGate.equals(EnvBase.PayGate.SIAMPAY)) {
-            url = new URL(Constants.url_siampay_genTxtXMLMPOS);
-        } else if (payGate.equals(EnvBase.PayGate.PESOPAY)) {
-            url = new URL(Constants.url_pesopay_genTxtXMLMPOS);
-        }
-
-        return url;
     }
 
     private String prepareHistoryResult(String result) throws JSONException {
