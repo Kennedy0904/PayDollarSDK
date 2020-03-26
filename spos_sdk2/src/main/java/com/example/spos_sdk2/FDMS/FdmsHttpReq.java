@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.example.spos_sdk2.EnvBase;
 import com.example.spos_sdk2.PayGate;
 import com.example.spos_sdk2.TrustModifier;
 import com.example.spos_sdk2.Utils;
@@ -22,10 +23,10 @@ public class FdmsHttpReq extends AsyncTask<String, Void, String> {
 
     FdmsVariable fdmsVariable = null;
     FdmsAsyncResponse delegate = null;//Call back interface
-    FdmsApiFunction FDActivity;
+    FdmsRequest FDActivity;
     Context context;
 
-    protected FdmsHttpReq(FdmsAsyncResponse asyncResponse, FdmsVariable fdmsVariable, FdmsApiFunction activity, Context context) {
+    protected FdmsHttpReq(FdmsAsyncResponse asyncResponse, FdmsVariable fdmsVariable, FdmsRequest activity, Context context) {
         this.delegate = asyncResponse;//Assigning call back interface through constructor
         this.fdmsVariable = fdmsVariable;
         this.FDActivity = activity;
@@ -33,7 +34,7 @@ public class FdmsHttpReq extends AsyncTask<String, Void, String> {
 
     }
 
-    public FdmsHttpReq(FdmsVariable fdmsVariable, FdmsApiFunction activity, Context context) {
+    public FdmsHttpReq(FdmsVariable fdmsVariable, FdmsRequest activity, Context context) {
         this.fdmsVariable = fdmsVariable;
         this.context = context;
         this.FDActivity = activity;
@@ -46,16 +47,17 @@ public class FdmsHttpReq extends AsyncTask<String, Void, String> {
         String result = "";
         Map<String, String> parameters = new HashMap<>();
 
-        if (fdmsVariable.getRequestAction().equalsIgnoreCase("createTxn")) {
+        if (fdmsVariable.getRequestAction().toString().equalsIgnoreCase("createTxn")) {
+
             baseUrl = PayGate.getPayCompURL(fdmsVariable.getPayGate());
 
             parameters.put("merchantId", fdmsVariable.getMerId());
             parameters.put("merName", fdmsVariable.getMerName());
-            parameters.put("currCode", fdmsVariable.getCurrCode());
+            parameters.put("currCode", fdmsVariable.getCurrCode().toString());
             parameters.put("amount", fdmsVariable.getAmount());
-            parameters.put("merRequestAmt", fdmsVariable.getMerRequestAmt());
+            parameters.put("merRequestAmt", fdmsVariable.getAmount());
             parameters.put("surcharge", fdmsVariable.getSurcharge());
-            parameters.put("payType", fdmsVariable.getPayType());
+            parameters.put("payType", fdmsVariable.getPayType().toString());
             parameters.put("orderRef", fdmsVariable.getMerRef());
             parameters.put("pMethod", fdmsVariable.getpMethod());
             parameters.put("cardNo", fdmsVariable.getCardNo());
@@ -64,7 +66,6 @@ public class FdmsHttpReq extends AsyncTask<String, Void, String> {
             parameters.put("epYear", fdmsVariable.getEpYear());
             parameters.put("CVV2Data", fdmsVariable.getCVV2Data());
             parameters.put("operatorId", fdmsVariable.getOperatorId());
-            parameters.put("channelType", fdmsVariable.getChannel());
             parameters.put("useSurcharge", fdmsVariable.getHideSurcharge());
             parameters.put("processingCode", fdmsVariable.getProcessingCode());
             parameters.put("POSEntryMode", fdmsVariable.getPOSEntryMode());
@@ -73,17 +74,21 @@ public class FdmsHttpReq extends AsyncTask<String, Void, String> {
             parameters.put("track2Data", fdmsVariable.getTrack2Data());
             parameters.put("enryptedPIN", fdmsVariable.getEnryptedPIN());
             parameters.put("EMVData", fdmsVariable.getEMVICCRelatedData());
+            parameters.put("channelType", "MPOS");
+
 //            parameters.put("invoiceRef", FdmsVariable.getInvoiceRef());
 //            parameters.put("batchNo", FdmsVariable.getBatchNo());
 
-        } else if (fdmsVariable.getRequestAction().equalsIgnoreCase("updateFailedTxn")) {
+        } else if (fdmsVariable.getRequestAction().toString().equalsIgnoreCase("updateFailedTxn")) {
+
             baseUrl = PayGate.getFDMSReturnURL(fdmsVariable.getPayGate());
 
             parameters.put("merchantId", fdmsVariable.getMerId());
             parameters.put("orderId", fdmsVariable.getPayRef());
             parameters.put("action", fdmsVariable.getAction());
 
-        } else if (fdmsVariable.getRequestAction().equalsIgnoreCase("updateTxnAccepted")) {
+        } else if (fdmsVariable.getRequestAction().toString().equalsIgnoreCase("updateTxnAccepted")) {
+            Log.d(FDMS_TAG, "Start to update txn");
             baseUrl = PayGate.getFDMSReturnURL(fdmsVariable.getPayGate());
 
             parameters.put("merchantId", fdmsVariable.getMerId());
@@ -103,8 +108,25 @@ public class FdmsHttpReq extends AsyncTask<String, Void, String> {
             parameters.put("appName", fdmsVariable.getAppName());
             parameters.put("AID", fdmsVariable.getAid());
 
-        } else if (fdmsVariable.getRequestAction().equalsIgnoreCase("updateTxnRejected")
-                || fdmsVariable.getRequestAction().equalsIgnoreCase("updateTxnCancelled")) {
+            Log.d(FDMS_TAG, fdmsVariable.getMerId());
+            Log.d(FDMS_TAG, fdmsVariable.getPayRef());
+            Log.d(FDMS_TAG, fdmsVariable.getAction());
+            Log.d(FDMS_TAG, fdmsVariable.getInvoiceNo());
+            Log.d(FDMS_TAG, fdmsVariable.getCardNo());
+            Log.d(FDMS_TAG, fdmsVariable.getRRN());
+            Log.d(FDMS_TAG, fdmsVariable.getBatchNo());
+            Log.d(FDMS_TAG, fdmsVariable.getTraceNo());
+            Log.d(FDMS_TAG, fdmsVariable.getPayMethod());
+            Log.d(FDMS_TAG, fdmsVariable.getAppCode());
+            Log.d(FDMS_TAG, fdmsVariable.getTc());
+            Log.d(FDMS_TAG, fdmsVariable.getTsi());
+            Log.d(FDMS_TAG, fdmsVariable.getAtc());
+            Log.d(FDMS_TAG, fdmsVariable.getTvr());
+            Log.d(FDMS_TAG, fdmsVariable.getAppName());
+            Log.d(FDMS_TAG, fdmsVariable.getAid());
+
+        } else if (fdmsVariable.getRequestAction().toString().equalsIgnoreCase("updateTxnRejected")
+                || fdmsVariable.getRequestAction().toString().equalsIgnoreCase("updateTxnCancelled")) {
             baseUrl = PayGate.getFDMSReturnURL(fdmsVariable.getPayGate());
 
             parameters.put("merchantId", fdmsVariable.getMerId());
@@ -112,7 +134,7 @@ public class FdmsHttpReq extends AsyncTask<String, Void, String> {
             parameters.put("action", fdmsVariable.getAction());
             parameters.put("payMethod", fdmsVariable.getPayMethod());
 
-        } else if (fdmsVariable.getRequestAction().equalsIgnoreCase("voidTxn")) {
+        } else if (fdmsVariable.getRequestAction().toString().equalsIgnoreCase("voidTxn")) {
             baseUrl = PayGate.getOrderAPIURL(fdmsVariable.getPayGate());
 
             parameters.put("merchantId", fdmsVariable.getMerId());
@@ -123,7 +145,7 @@ public class FdmsHttpReq extends AsyncTask<String, Void, String> {
             parameters.put("invoiceNo", fdmsVariable.getInvoiceNo());
             parameters.put("traceNo", fdmsVariable.getTraceNo());
 
-        } else if (fdmsVariable.getRequestAction().equalsIgnoreCase("settlementTxn")) {
+        } else if (fdmsVariable.getRequestAction().toString().equalsIgnoreCase("settlementTxn")) {
             baseUrl = PayGate.getFDMSReturnURL(fdmsVariable.getPayGate());
 
             parameters.put("merchantId", fdmsVariable.getMerId());
@@ -190,7 +212,7 @@ public class FdmsHttpReq extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
 
-        if (fdmsVariable.getRequestAction().equalsIgnoreCase("createTxn")) {
+        if (fdmsVariable.getRequestAction().toString().equalsIgnoreCase("createTxn")) {
 
             Log.d(FDMS_TAG, "FDMS Txn create result: " + result);
 
@@ -204,14 +226,15 @@ public class FdmsHttpReq extends AsyncTask<String, Void, String> {
 
             if (fdmsVariable.getCreateTxnCode() != null &&
                     fdmsVariable.getCreateTxnCode().equalsIgnoreCase("0")) {
-                FDActivity.saleRequest(fdmsVariable);
+                FDActivity.setFdmsVariables(fdmsVariable);
+                FDActivity.saleRequest();
             } else {
 
                 if (fdmsVariable.getErrMsg() != null) {
 
                     delegate.processFinish(fdmsVariable.getErrMsg());
 
-                    fdmsVariable.setRequestAction("updateFailedTxn");
+                    fdmsVariable.setRequestAction(EnvBase.FDRequest.UPDATE_FAILED_TXN);
                     fdmsVariable.setAction("Update_Failed_Txn");
 
                     FdmsHttpReq request = new FdmsHttpReq(fdmsVariable, FDActivity, context);
@@ -221,19 +244,19 @@ public class FdmsHttpReq extends AsyncTask<String, Void, String> {
                     delegate.processFinish("Create transaction failed");
                 }
             }
-        } else if (fdmsVariable.getRequestAction().contains("updateTxn")) {
+        } else if (fdmsVariable.getRequestAction().toString().contains("updateTxn")) {
 
             Log.d(FDMS_TAG, "FDMS Txn update result: " + result);
 
             delegate.processFinish(result);
 
-        } else if (fdmsVariable.getRequestAction().contains("voidTxn")) {
+        } else if (fdmsVariable.getRequestAction().toString().contains("voidTxn")) {
 
             Log.d(FDMS_TAG, "FDMS Txn void result: " + result);
 
             delegate.processFinish(result);
 
-        } else if (fdmsVariable.getRequestAction().contains("settleTxn")) {
+        } else if (fdmsVariable.getRequestAction().toString().contains("settleTxn")) {
 
             Log.d(FDMS_TAG, "FDMS Txn settlement result: " + result);
 

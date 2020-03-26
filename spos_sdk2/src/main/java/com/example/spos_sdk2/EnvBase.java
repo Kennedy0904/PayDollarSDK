@@ -503,6 +503,58 @@ public class EnvBase {
         }
     }
 
+    public enum PayBankId {
+        FIRST_DATA{
+            @Override
+            public String toString() {
+                return "First-Data";
+            }
+        }
+    }
+
+    public enum FDRequest {
+        SALE{
+            @Override
+            public String toString() {
+                return "createTxn";
+            }
+        },VOID{
+            @Override
+            public String toString() {
+                return "voidTxn";
+            }
+        },SETTLEMENT{
+            @Override
+            public String toString() {
+                return "settlementTxn";
+            }
+        },REPRINT {
+            @Override
+            public String toString() {
+                return "";
+            }
+        },UPDATE_TXN_ACCEPTED{
+            @Override
+            public String toString() {
+                return "updateTxnAccepted";
+            }
+        },UPDATE_TXN_REJECTED{
+            @Override
+            public String toString() {
+                return "updateTxnRejected";
+            }
+        },UPDATE_TXN_CANCELLED{
+            @Override
+            public String toString() {
+                return "updateTxnCancelled";
+            }
+        },UPDATE_FAILED_TXN{
+            @Override
+            public String toString() {
+                return "updateFailedTxn";
+            }
+        }
+    }
 
     public enum EnvType {
         PRODUCTION{
@@ -522,9 +574,6 @@ public class EnvBase {
             }
         }
     }
-
-
-
 
     public enum PayChannel {
 

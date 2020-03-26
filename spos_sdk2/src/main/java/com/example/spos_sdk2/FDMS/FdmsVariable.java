@@ -4,9 +4,12 @@ import com.example.spos_sdk2.EnvBase;
 
 public class FdmsVariable {
 
+	public String merId;
+	public String amount;
+
 	public String cardNo;
 	public String ProcessingCode = "";
-	public String amount;
+
 	public String merRef;
 	public String POSEntryMode = "";
 	public String PANSeqNo = "";
@@ -15,12 +18,12 @@ public class FdmsVariable {
 	public String EnryptedPIN = "";
 	public String EMVICCRelatedData = "";
 	public String InvoiceRef = "";
-	public String merId;
+
 	public String merName;
-	public String currCode;
+
 	public String merRequestAmt = "";
 	public String surcharge;
-	public String payType;
+
 	public String pMethod;
 	public String cardHolder;
 	public String epMonth;
@@ -43,7 +46,7 @@ public class FdmsVariable {
 	public String traceNo;
 	public String payMethod;
 	public String URL;
-	public String requestAction;
+
 	public String result = "";
 	public String user;
 	public String password;
@@ -54,7 +57,6 @@ public class FdmsVariable {
 	public String voidTxnCode;
 	public String settleTxnCode;
 	public String settle;
-	public String payBankId;
 	public String status;
 	public String errCode;
 	public String returnMsg;
@@ -65,7 +67,12 @@ public class FdmsVariable {
 	public String currName;
 	public String remark;
 	public String errMsg;
+
+	public EnvBase.Currency currCode;
+	public EnvBase.PayBankId payBankId;
+	public EnvBase.PayType payType;
 	public EnvBase.PayGate payGate;
+	public EnvBase.FDRequest requestAction;
 
 	public String getErrMsg() {
 		return errMsg;
@@ -99,11 +106,11 @@ public class FdmsVariable {
 		this.settle = settle;
 	}
 
-	public String getPayBankId() {
+	public EnvBase.PayBankId getPayBankId() {
 		return payBankId;
 	}
 
-	public void setPayBankId(String payBankId) {
+	public void setPayBankId(EnvBase.PayBankId payBankId) {
 		this.payBankId = payBankId;
 	}
 
@@ -309,11 +316,11 @@ public class FdmsVariable {
 		this.merName = merName;
 	}
 
-	public String getCurrCode() {
+	public EnvBase.Currency getCurrCode() {
 		return currCode;
 	}
 
-	public void setCurrCode(String currCode) {
+	public void setCurrCode(EnvBase.Currency currCode) {
 		this.currCode = currCode;
 	}
 
@@ -333,11 +340,11 @@ public class FdmsVariable {
 		this.surcharge = surcharge;
 	}
 
-	public String getPayType() {
+	public EnvBase.PayType getPayType() {
 		return payType;
 	}
 
-	public void setPayType(String payType) {
+	public void setPayType(EnvBase.PayType payType) {
 		this.payType = payType;
 	}
 
@@ -517,11 +524,11 @@ public class FdmsVariable {
 		this.URL = URL;
 	}
 
-	public String getRequestAction() {
+	public EnvBase.FDRequest getRequestAction() {
 		return requestAction;
 	}
 
-	public void setRequestAction(String requestAction) {
+	public void setRequestAction(EnvBase.FDRequest requestAction) {
 		this.requestAction = requestAction;
 	}
 

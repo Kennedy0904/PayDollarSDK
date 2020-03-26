@@ -37,7 +37,6 @@ public class LoginCall {
             baseUrl = PayGate.getLoginURL(loginData.getPayGate());
             URL url = new URL(baseUrl);
 //            url = setLoginURL(loginData.getPayGate());
-
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             TrustModifier.relaxHostChecking(con);
             con.setRequestMethod("POST");
@@ -53,6 +52,7 @@ public class LoginCall {
             Log.d(LOGIN_TAG, "merchantId: " + loginData.getMerchantId());
             Log.d(LOGIN_TAG, "userId: " + loginData.getUserId());
             Log.d(LOGIN_TAG, "password: " + loginData.getPassword());
+            Log.d(LOGIN_TAG, "payGate: " + loginData.getPayGate().toString());
 
             DataOutputStream out = new DataOutputStream(con.getOutputStream());
             out.writeBytes(Utils.getParamsString(parameters));

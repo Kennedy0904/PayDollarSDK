@@ -24,9 +24,9 @@ public class PayGate {
         if (payGate.equals(EnvBase.PayGate.PAYDOLLAR)) {
             URLmerInfo = Constants.url_paydollar_merInfo;
         } else if (payGate.equals(EnvBase.PayGate.SIAMPAY)) {
-            URLmerInfo = Constants.url_pesopay_merInfo;
-        } else if (payGate.equals(EnvBase.PayGate.PESOPAY)) {
             URLmerInfo = Constants.url_siampay_merInfo;
+        } else if (payGate.equals(EnvBase.PayGate.PESOPAY)) {
+            URLmerInfo = Constants.url_pesopay_merInfo;
         }
         return URLmerInfo;
     }
@@ -37,9 +37,9 @@ public class PayGate {
         if (payGate.equals(EnvBase.PayGate.PAYDOLLAR)) {
             URLpayment = Constants.url_paydollar_payComp;
         } else if (payGate.equals(EnvBase.PayGate.SIAMPAY))  {
-            URLpayment = Constants.url_pesopay_payComp;
-        } else if (payGate.equals(EnvBase.PayGate.PESOPAY)) {
             URLpayment = Constants.url_siampay_payComp;
+        } else if (payGate.equals(EnvBase.PayGate.PESOPAY)) {
+            URLpayment = Constants.url_pesopay_payComp;
         }
         return URLpayment;
     }
@@ -71,9 +71,9 @@ public class PayGate {
         if(payGate.equals(EnvBase.PayGate.PAYDOLLAR)){
             URLQRAction = Constants.url_paydollar_QRAction;
         } else if (payGate.equals(EnvBase.PayGate.SIAMPAY)) {
-            URLQRAction = Constants.url_pesopay_QRAction;
-        } else if (payGate.equals(EnvBase.PayGate.PESOPAY)) {
             URLQRAction = Constants.url_siampay_QRAction;
+        } else if (payGate.equals(EnvBase.PayGate.PESOPAY)) {
+            URLQRAction = Constants.url_pesopay_QRAction;
         }
         return URLQRAction;
     }
@@ -95,9 +95,9 @@ public class PayGate {
         if(payGate.equals(EnvBase.PayGate.PAYDOLLAR)){
             URLorder = Constants.url_paydollar_orderApi;
         } else if (payGate.equals(EnvBase.PayGate.SIAMPAY)) {
-            URLorder = Constants.url_pesopay_orderApi;
-        } else if (payGate.equals(EnvBase.PayGate.PESOPAY)) {
             URLorder = Constants.url_siampay_orderApi;
+        } else if (payGate.equals(EnvBase.PayGate.PESOPAY)) {
+            URLorder = Constants.url_pesopay_orderApi;
         }
 
         return URLorder;
@@ -108,9 +108,9 @@ public class PayGate {
         if(payGate.equals(EnvBase.PayGate.PAYDOLLAR)){
             URLpayFDMSReturnMPOS=Constants.url_paydollar_payFDMSReturnMPOS;
         } else if (payGate.equals(EnvBase.PayGate.SIAMPAY)) {
-            URLpayFDMSReturnMPOS=Constants.url_pesopay_payFDMSReturnMPOS;
-        } else if (payGate.equals(EnvBase.PayGate.PESOPAY)) {
             URLpayFDMSReturnMPOS=Constants.url_siampay_payFDMSReturnMPOS;
+        } else if (payGate.equals(EnvBase.PayGate.PESOPAY)) {
+            URLpayFDMSReturnMPOS=Constants.url_pesopay_payFDMSReturnMPOS;
         }
 
         return URLpayFDMSReturnMPOS;
@@ -121,9 +121,9 @@ public class PayGate {
         if(payGate.equals(EnvBase.PayGate.PAYDOLLAR)){
             URLgenTxtXML_Settlement = Constants.url_paydollar_genTxtJSONSPOS_Settlement;
         } else if (payGate.equals(EnvBase.PayGate.SIAMPAY)) {
-            URLgenTxtXML_Settlement = Constants.url_pesopay_genTxtJSONSPOS_Settlement;
-        } else if (payGate.equals(EnvBase.PayGate.PESOPAY)) {
             URLgenTxtXML_Settlement = Constants.url_siampay_genTxtJSONSPOS_Settlement;
+        } else if (payGate.equals(EnvBase.PayGate.PESOPAY)) {
+            URLgenTxtXML_Settlement = Constants.url_pesopay_genTxtJSONSPOS_Settlement;
         }
         return URLgenTxtXML_Settlement;
     }
