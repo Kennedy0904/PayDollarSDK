@@ -2,6 +2,8 @@ package com.example.spos_sdk2;
 
 import android.util.Log;
 
+import com.example.spos_sdk2.ISO_8583.CardData;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -33,7 +35,7 @@ public class PayCall {
 
         oriAmount = payData.getAmount();
         oriCur = payData.getCurrCode();
-        oriPMethod = payData.getpMethod();
+        oriPMethod = payData.getPayMethod();
 
         operatorId = payData.getOperatorId() == null ? "" : payData.getOperatorId();
         String result = "";
@@ -55,29 +57,41 @@ public class PayCall {
             parameters.put(Constants.currCode, payData.getCurrCode().toString());
             parameters.put(Constants.payType, payData.getPayType().toString());
             parameters.put(Constants.orderRef, payData.getOrderRef());
-            parameters.put(Constants.pMethod, payData.getpMethod().toString());
+            parameters.put(Constants.pMethod, payData.getPayMethod().toString());
             parameters.put(Constants.operatorId, operatorId);
             parameters.put(Constants.channelType, "MPOS");
 
-            if (payData.getPayment().equals(EnvBase.Payment.PRESENT_QR) && !payData.getpMethod().toString().equals("BOOSTOFFL")){
+            Log.d(PAYMENT_TAG, "merchantId: " + payData.getMerchantId());
+            Log.d(PAYMENT_TAG, "amount: " + payData.getAmount());
+            Log.d(PAYMENT_TAG, "currCode: " + payData.getCurrCode().toString());
+            Log.d(PAYMENT_TAG, "payType: " + payData.getPayType().toString());
+            Log.d(PAYMENT_TAG, "orderRef: " + payData.getOrderRef());
+            Log.d(PAYMENT_TAG, "pMethod: " + payData.getPayMethod().toString());
+            Log.d(PAYMENT_TAG, "operatorId: " + operatorId);
+
+            if (payData.getPayment().equals(EnvBase.Payment.PRESENT_QR) && !payData.getPayMethod().toString().equals("BOOSTOFFL")){
                 parameters.put("presentQR", "T");
-            }else{
-                if(payData.getpMethod().toString().equals("BOOSTOFFL")){
+            }else if (payData.getPayment().equals(EnvBase.Payment.SCAN_QR)){
+                if(payData.getPayMethod().toString().equals("BOOSTOFFL")){
                     parameters.put(Constants.cardNo, "4518354303130007");
                     Log.d(PAYMENT_TAG, "txnNo: " + "4518354303130007");
                 }else {
                     parameters.put(Constants.cardNo, payData.getTxnNo());
                     Log.d(PAYMENT_TAG, "txnNo: " + payData.getTxnNo());
                 }
-            }
-            Log.d(PAYMENT_TAG, "merchantId: " + payData.getMerchantId());
-            Log.d(PAYMENT_TAG, "amount: " + payData.getAmount());
-            Log.d(PAYMENT_TAG, "currCode: " + payData.getCurrCode().toString());
-            Log.d(PAYMENT_TAG, "payType: " + payData.getPayType().toString());
-            Log.d(PAYMENT_TAG, "orderRef: " + payData.getOrderRef());
-            Log.d(PAYMENT_TAG, "pMethod: " + payData.getpMethod().toString());
-            Log.d(PAYMENT_TAG, "operatorId: " + operatorId);
+            }else if (payData.getPayment().equals(EnvBase.Payment.CARD)){
+                CardData cardData = payData.getCardData();
+                parameters.put(Constants.cardNo, cardData.getCardNo());
+                parameters.put(Constants.cardHolder, cardData.getCardHolder() == null ? "" : cardData.getCardHolder());
+                parameters.put(Constants.epMonth, cardData.getEpMonth());
+                parameters.put(Constants.epYear, cardData.getEpYear());
 
+                Log.d(PAYMENT_TAG, "cardNo: " + cardData.getCardNo());
+                Log.d(PAYMENT_TAG, "cardHolder: " + cardData.getCardHolder() == null ? "" : cardData.getCardHolder());
+                Log.d(PAYMENT_TAG, "epMonth: " + cardData.getEpMonth());
+                Log.d(PAYMENT_TAG, "epYear: " + cardData.getEpYear());
+            }
+            Log.d(PAYMENT_TAG, "Params: " + Utils.getParamsString(parameters));
             con.setDoOutput(true);
             DataOutputStream out = new DataOutputStream(con.getOutputStream());
             out.writeBytes(Utils.getParamsString(parameters));
@@ -181,7 +195,7 @@ public class PayCall {
                 QRCodeType = "text";
             }
         }
-        Log.d(PAYMENT_TAG, "QRRef: " + QRRef);
+
         PayResult payResult = new PayResult();
         payResult.setResultCode(resultCode);
         payResult.setReturnMsg(returnMsg);
@@ -200,50 +214,6 @@ public class PayCall {
         payResult.setQRRef(QRRef);
         payResult.setQRCodeType(QRCodeType);
 
-//        if(successCode.equals("0")){
-////                Bitmap bitmap = null;
-////                byte[] decodedString;
-////
-////                if(payData.getpMethod().equals(EnvBase.PayMethod.PROMPTPAY)){
-////                    decodedString = android.util.Base64.decode(QRCodeStr, Base64.DEFAULT);
-////                    bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-////                }else{
-////                    bitmap = TextToImageEncode(QRCodeStr);
-////                }
-//            payResult.setMerchantRef(merchantRef);
-//            payResult.setPayDollarRef(payDollarRef);
-//            payResult.setAmount(amount);
-//            payResult.setCurrency(currCode);
-//            payResult.setBankRef(txnNo);
-//            payResult.setTxnTime(txTime);
-//            payResult.setPayMethod(payMethod);
-//            payResult.setPrc(prc);
-//            payResult.setSrc(src);
-//            payResult.setReturnMsg(returnMsg);
-//            payResult.setQRCode(QRCodeStr);
-//            payResult.setQRRef(QRRef);
-//        }else {
-//            payResult.setReturnMsg("Failed to get QR Code.");
-//        }
-
         return payResult;
     }
-
-
-//    public Bitmap TextToImageEncode(String text) throws WriterException, IOException {
-//
-//        Bitmap bitmap = null;
-//
-//        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
-//        try {
-//            BitMatrix bitMatrix = multiFormatWriter.encode(text, BarcodeFormat.QR_CODE,300,300);
-//            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-//            bitmap = barcodeEncoder.createBitmap(bitMatrix);
-//
-//        } catch (WriterException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return bitmap;
-//    }
 }

@@ -138,7 +138,7 @@ public class EnvBase {
            public String toString() {
                return "682";
            }
-       },
+        },
         AED {
             @Override
             public String toString() {
@@ -206,7 +206,6 @@ public class EnvBase {
                 return "752";
             }
         },
-
         CHF{
             @Override
             public String toString() {
@@ -236,27 +235,32 @@ public class EnvBase {
             public String toString() {
                 return "203";
             }
-        }, EGP{
+        },
+        EGP{
             @Override
             public String toString() {
                 return "818";
             }
-        }, HUF{
+        },
+        HUF{
             @Override
             public String toString() {
                 return "348";
             }
-        }, KZT{
+        },
+        KZT{
             @Override
             public String toString() {
                 return "398";
             }
-        }, LBP{
+        },
+        LBP{
             @Override
             public String toString() {
                 return "422";
             }
-        }, MXN{
+        },
+        MXN{
             @Override
             public String toString() {
                 return "484";
@@ -404,6 +408,16 @@ public class EnvBase {
             public String toString() {
                 return "WECHATHKOFFL";
             }
+        }, MASTER {
+            @Override
+            public String toString() {
+                return "Master";
+            }
+        }, VISA {
+            @Override
+            public String toString() {
+                return "VISA";
+            }
         }
     }
 
@@ -413,12 +427,12 @@ public class EnvBase {
             public String toString() {
                 return "scanqr";
             }
-        },PRESENT_QR{
+        }, PRESENT_QR{
             @Override
             public String toString() {
                 return "presentqr";
             }
-        },CARD{
+        }, CARD{
             @Override
             public String toString() {
                 return "card";
@@ -432,7 +446,7 @@ public class EnvBase {
             public String toString() {
                 return "asc";
             }
-        },DESC{
+        }, DESC{
             @Override
             public String toString() {
                 return "desc";
@@ -446,37 +460,37 @@ public class EnvBase {
             public String toString() {
                 return "Accepted";
             }
-        },REJECTED{
+        }, REJECTED{
             @Override
             public String toString() {
                 return "Rejected";
             }
-        },PENDING{
+        }, PENDING{
             @Override
             public String toString() {
                 return "Pending";
             }
-        },REFUNDED{
+        }, REFUNDED{
             @Override
             public String toString() {
                 return "Refunded";
             }
-        },PARTIAL_REFUNDED{
+        }, PARTIAL_REFUNDED{
             @Override
             public String toString() {
                 return "PartialRefunded";
             }
-        },CANCELLED{
+        }, CANCELLED{
             @Override
             public String toString() {
                 return "Cancelled";
             }
-        },ACCEPTED_ADJ{
+        }, ACCEPTED_ADJ{
             @Override
             public String toString(){
                 return "Accepted_Adj";
             }
-        },ALL{
+        }, ALL{
             @Override
             public String toString() {
                 return "";
@@ -490,12 +504,12 @@ public class EnvBase {
             public String toString() {
                 return "Void";
             }
-        },REFUND{
+        }, REFUND{
             @Override
             public String toString() {
                 return "OnlineRefund";
             }
-        },PARTIAL_REFUND{
+        }, PARTIAL_REFUND{
             @Override
             public String toString() {
                 return "OnlinePartialRefund";
@@ -518,37 +532,37 @@ public class EnvBase {
             public String toString() {
                 return "createTxn";
             }
-        },VOID{
+        }, VOID{
             @Override
             public String toString() {
                 return "voidTxn";
             }
-        },SETTLEMENT{
+        }, SETTLEMENT{
             @Override
             public String toString() {
                 return "settlementTxn";
             }
-        },REPRINT {
+        }, REPRINT {
             @Override
             public String toString() {
                 return "";
             }
-        },UPDATE_TXN_ACCEPTED{
+        }, UPDATE_TXN_ACCEPTED{
             @Override
             public String toString() {
                 return "updateTxnAccepted";
             }
-        },UPDATE_TXN_REJECTED{
+        }, UPDATE_TXN_REJECTED{
             @Override
             public String toString() {
                 return "updateTxnRejected";
             }
-        },UPDATE_TXN_CANCELLED{
+        }, UPDATE_TXN_CANCELLED{
             @Override
             public String toString() {
                 return "updateTxnCancelled";
             }
-        },UPDATE_FAILED_TXN{
+        }, UPDATE_FAILED_TXN{
             @Override
             public String toString() {
                 return "updateFailedTxn";

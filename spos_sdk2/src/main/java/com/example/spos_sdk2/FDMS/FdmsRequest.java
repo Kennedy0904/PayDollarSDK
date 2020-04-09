@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.example.spos_sdk2.EnvBase;
 import com.pax.fdms.opensdk.AdjustMsg;
@@ -121,28 +122,41 @@ public class FdmsRequest extends AppCompatActivity {
 	}
 
 	public void process() {
-		// Paydollar create Txn
-		// 'requestAction' used for send request in 'FdmsHttpRequest'
 
-		Calendar c = Calendar.getInstance();
-		String epMonth = new SimpleDateFormat("MM").format(c.getTime());
-		String year = new SimpleDateFormat("yyyy").format(c.getTime());
-		String epYear = String.valueOf(parseInt(year) + 3);
+		if(fdmsVariable.getRequestAction().equals(EnvBase.FDRequest.SALE)){
 
-		fdmsVariable.setCardNo("4518354303137777");
-		fdmsVariable.setSurcharge("0");
-		fdmsVariable.setpMethod("VISA");
-		fdmsVariable.setCardHolder("");
-		fdmsVariable.setEpMonth(epMonth);
-		fdmsVariable.setEpYear(epYear);
+			// Paydollar create Txn
+			// 'requestAction' used for send request in 'FdmsHttpRequest'
 
-		FdmsHttpReq request = new FdmsHttpReq(new FdmsAsyncResponse() {
-			@Override
-			public void processFinish(String output) {
-				Fdresponse.getResponse(output);
-			}
-		}, fdmsVariable, FdmsRequest.this, context);
-		request.execute();
+			Calendar c = Calendar.getInstance();
+			String epMonth = new SimpleDateFormat("MM").format(c.getTime());
+			String year = new SimpleDateFormat("yyyy").format(c.getTime());
+			String epYear = String.valueOf(parseInt(year) + 3);
+
+			fdmsVariable.setCardNo("4518354303137777");
+			fdmsVariable.setSurcharge("0");
+			fdmsVariable.setpMethod("VISA");
+			fdmsVariable.setCardHolder("");
+			fdmsVariable.setEpMonth(epMonth);
+			fdmsVariable.setEpYear(epYear);
+
+			FdmsHttpReq request = new FdmsHttpReq(new FdmsAsyncResponse() {
+				@Override
+				public void processFinish(FdmsVariable output) {
+					Fdresponse.getResponse(output);
+				}
+			}, fdmsVariable, FdmsRequest.this, context);
+			request.execute();
+
+		} else if(fdmsVariable.getRequestAction().equals(EnvBase.FDRequest.VOID)) {
+			voidRequest();
+		} else if(fdmsVariable.getRequestAction().equals(EnvBase.FDRequest.SETTLEMENT)) {
+			settleRequest();
+		} else if(fdmsVariable.getRequestAction().equals(EnvBase.FDRequest.REPRINT)) {
+			reprintRequest();
+		}
+
+
 
 //		FdmsHttpReq request = new FdmsHttpReq(FdmsRequest.this, context);
 //		request.execute();
@@ -153,7 +167,7 @@ public class FdmsRequest extends AppCompatActivity {
 	//**************************************
 
 	/** Sale Transaction */
-	public void saleRequest() {
+	protected void saleRequest() {
 		SaleMsg.Request request = new SaleMsg.Request();
 		request.setAppId("com.pax.fdms.base24");
 		request.setPackageName("com.pax.fdms.base24");
@@ -165,7 +179,7 @@ public class FdmsRequest extends AppCompatActivity {
 	}
 
 	/** Void Transaction */
-	public void voidRequest() {
+	protected void voidRequest() {
 		VoidMsg.Request request = new VoidMsg.Request();
 		request.setAppId("com.pax.fdms.base24");
 		request.setPackageName("com.pax.fdms.base24");
@@ -177,7 +191,7 @@ public class FdmsRequest extends AppCompatActivity {
 	}
 
 	/** Refund Transaction */
-	public boolean refundRequest(Activity activity, int amount) {
+	protected boolean refundRequest(Activity activity, int amount) {
 		RefundMsg.Request request = new RefundMsg.Request();
 		request.setAppId("com.pax.fdms.base24");
 		request.setPackageName("com.pax.fdms.base24");
@@ -188,7 +202,7 @@ public class FdmsRequest extends AppCompatActivity {
 	}
 
 	// Offline Transaction
-	public boolean offlineRequest(Activity activity, int amount) {
+	protected boolean offlineRequest(Activity activity, int amount) {
 		OfflineMsg.Request request = new OfflineMsg.Request();
 		request.setAppId("com.pax.fdms.base24");
 		request.setPackageName("com.pax.fdms.base24");
@@ -199,7 +213,7 @@ public class FdmsRequest extends AppCompatActivity {
 	}
 
 	// Adjust Transaction
-	public boolean adjustRequest(Activity activity, int invoiceNo) {
+	protected boolean adjustRequest(Activity activity, int invoiceNo) {
 		AdjustMsg.Request request = new AdjustMsg.Request();
 		request.setAppId("com.pax.fdms.base24");
 		request.setPackageName("com.pax.fdms.base24");
@@ -210,7 +224,7 @@ public class FdmsRequest extends AppCompatActivity {
 	}
 
 	// PreAuth Transaction
-	public boolean preAuthRequest(Activity activity, int amount) {
+	protected boolean preAuthRequest(Activity activity, int amount) {
 		PreAuthMsg.Request request = new PreAuthMsg.Request();
 		request.setAppId("com.pax.fdms.base24");
 		request.setPackageName("com.pax.fdms.base24");
@@ -221,7 +235,7 @@ public class FdmsRequest extends AppCompatActivity {
 	}
 
 	// PreAuthVoid Transaction
-	public boolean preAuthVoidRequest(Activity activity) {
+	protected boolean preAuthVoidRequest(Activity activity) {
 		PreAuthVoidMsg.Request request = new PreAuthVoidMsg.Request();
 		request.setAppId("com.pax.fdms.base24");
 		request.setPackageName("com.pax.fdms.base24");
@@ -231,7 +245,7 @@ public class FdmsRequest extends AppCompatActivity {
 	}
 
 	// PreAuthComp Transaction
-	public boolean preAuthCompRequest(Activity activity) {
+	protected boolean preAuthCompRequest(Activity activity) {
 		PreAuthCompMsg.Request request = new PreAuthCompMsg.Request();
 		request.setAppId("com.pax.fdms.base24");
 		request.setPackageName("com.pax.fdms.base24");
@@ -241,7 +255,7 @@ public class FdmsRequest extends AppCompatActivity {
 	}
 
 	// PreAuthCompVoid Transaction
-	public boolean preAuthCompVoidRequest(Activity activity) {
+	protected boolean preAuthCompVoidRequest(Activity activity) {
 		PreAuthCompVoidMsg.Request request = new PreAuthCompVoidMsg.Request();
 		request.setAppId("com.pax.fdms.base24");
 		request.setPackageName("com.pax.fdms.base24");
@@ -251,7 +265,7 @@ public class FdmsRequest extends AppCompatActivity {
 	}
 
 	// Settle Transaction
-	public void settleRequest() {
+	protected void settleRequest() {
 		SettleMsg.Request request = new SettleMsg.Request();
 		request.setAppId("com.pax.fdms.base24");
 		request.setPackageName("com.pax.fdms.base24");
@@ -261,7 +275,7 @@ public class FdmsRequest extends AppCompatActivity {
 	}
 
 	// Reprint Transaction
-	public void reprintRequest(FdmsVariable fdmsVariable) {
+	protected void reprintRequest() {
 		ReprintTransMsg.Request request = new ReprintTransMsg.Request();
 		request.setTraceNo(parseInt(fdmsVariable.getTraceNo()));
 		request.setAppId("com.pax.fdms.base24");
@@ -271,7 +285,7 @@ public class FdmsRequest extends AppCompatActivity {
 	}
 
 	// Reprint Total
-	public void reprintTotalRequest() {
+	protected void reprintTotalRequest() {
 		ReprintTotalMsg.Request request = new ReprintTotalMsg.Request();
 		//request.setAcquireName("FDMS-CUP");
 		request.setAppId("com.pax.fdms.base24");
@@ -281,7 +295,7 @@ public class FdmsRequest extends AppCompatActivity {
 	}
 
 	// Get Transaction
-	public void getTransactionRequest(Activity activity, int traceNo) {
+	protected void getTransactionRequest(Activity activity, int traceNo) {
 		GetTransMsg.Request request = new GetTransMsg.Request();
 		request.setTraceNo(traceNo);
 		request.setAppId("com.pax.fdms.base24");
@@ -291,7 +305,7 @@ public class FdmsRequest extends AppCompatActivity {
 	}
 
 	// Get Total
-	public void getTotalRequest() {
+	protected void getTotalRequest() {
 		GetTotalMsg.Request request = new GetTotalMsg.Request();
 		request.setAcquireName("FDMS-V/M");
 		request.setAppId("com.pax.fdms.base24");
@@ -302,7 +316,7 @@ public class FdmsRequest extends AppCompatActivity {
 	}
 
 	// View History
-	public void viewHistoryRequest() {
+	protected void viewHistoryRequest() {
 		TransReviewMsg.Request request = new TransReviewMsg.Request();
 		request.setAppId("com.pax.fdms.base24");
 		request.setPackageName("com.pax.fdms.base24");
@@ -311,7 +325,7 @@ public class FdmsRequest extends AppCompatActivity {
 	}
 
 	// Installment Transaction
-	public boolean installmentRequest(Activity activity, int amount) {
+	protected boolean installmentRequest(Activity activity, int amount) {
 		InstalmentMsg.Request request = new InstalmentMsg.Request();
 		request.setAppId("com.pax.fdms.base24");
 		request.setPackageName("com.pax.fdms.base24");
@@ -343,15 +357,15 @@ public class FdmsRequest extends AppCompatActivity {
 			if (bundle != null) {
 				Set<String> keys = bundle.keySet();
 				Iterator<String> it = keys.iterator();
-				System.out.println("Intent value start");
+				Log.d(FDMS_TAG, "Intent value start");
 				while (it.hasNext()) {
 					String key = it.next();
-					System.out.println("[" + key + "=" + bundle.get(key) + "]");
+					Log.d(FDMS_TAG, "[" + key + "=" + bundle.get(key) + "]");
 				}
-				System.out.println("Intent value end");
+				Log.d(FDMS_TAG, "Intent value end");
 			}
 		}
-		System.out.println("Intent value end");
+		Log.d(FDMS_TAG, "Intent value end");
 
 		if (requestCode == 100 && response != null) {
 
@@ -389,40 +403,40 @@ public class FdmsRequest extends AppCompatActivity {
 			transTime = response.getTransTime();
 			tvr = (response.getTvr() == null) ? "": response.getTvr();
 
-			System.out.println("---acquirerName: " + acquirerName);
-			System.out.println("---aid: " + aid);
-			System.out.println("---amount: " + response.getAmount());
-			System.out.println("---app: " + appName);
-			System.out.println("---appcode: " + appCode);
-			System.out.println("---appid: " + appid);
-			System.out.println("---atc: " + atc);
-			System.out.println("---batchno: " + batchNo);
-			System.out.println("---cardholderCode: " + cardholderCode);
-			System.out.println("---cardholderSignature: " + cardholderSignature);
-			System.out.println("--- cardNo : " + cardNo);
-			System.out.println("--- cardType: " + cardType);
-			System.out.println("--- dccTransAmt: " + dccTransAmt);
-			System.out.println("--- emiPerMonth: " + emiPerMonth);
-			System.out.println("--- enterMode: " + enterMode);
-			System.out.println("--- fxRate: " + fxRate);
-			System.out.println("--- interestAmt: " + interestAmt);
-			System.out.println("--- invoiceNo: " + invoiceNo);
-			System.out.println("--- issuerName: " + payMethod);
-			System.out.println("--- localCurrCode: " + localCurrCode);
-			System.out.println("--- merchantId: " + merchantId);
-			System.out.println("--- merchantName: " + merchantName);
-			System.out.println("--- productCode: " + productCode);
-			System.out.println("--- RRN: " + RRN);
-			System.out.println("--- rspCode: " + saleResCodeFDMS);
-			System.out.println("--- rspMsg: " + rspMsg);
-			System.out.println("--- tc: " + tc);
-			System.out.println("--- tenure: " + tenure);
-			System.out.println("--- tsi: " + tsi);
-			System.out.println("--- terminalId: " + terminalId);
-			System.out.println("--- tipAmount: " + tipAmount);
-			System.out.println("--- traceNo: " + traceNo);
-			System.out.println("---transTime: " + transTime);
-			System.out.println("--- tvr: " + tvr);
+			Log.d(FDMS_TAG, "---acquirerName: " + acquirerName);
+			Log.d(FDMS_TAG, "---aid: " + aid);
+			Log.d(FDMS_TAG, "---amount: " + response.getAmount());
+			Log.d(FDMS_TAG, "---app: " + appName);
+			Log.d(FDMS_TAG, "---appcode: " + appCode);
+			Log.d(FDMS_TAG, "---appid: " + appid);
+			Log.d(FDMS_TAG, "---atc: " + atc);
+			Log.d(FDMS_TAG, "---batchno: " + batchNo);
+			Log.d(FDMS_TAG, "---cardholderCode: " + cardholderCode);
+			Log.d(FDMS_TAG, "---cardholderSignature: " + cardholderSignature);
+			Log.d(FDMS_TAG, "--- cardNo : " + cardNo);
+			Log.d(FDMS_TAG, "--- cardType: " + cardType);
+			Log.d(FDMS_TAG, "--- dccTransAmt: " + dccTransAmt);
+			Log.d(FDMS_TAG, "--- emiPerMonth: " + emiPerMonth);
+			Log.d(FDMS_TAG, "--- enterMode: " + enterMode);
+			Log.d(FDMS_TAG, "--- fxRate: " + fxRate);
+			Log.d(FDMS_TAG, "--- interestAmt: " + interestAmt);
+			Log.d(FDMS_TAG, "--- invoiceNo: " + invoiceNo);
+			Log.d(FDMS_TAG, "--- issuerName: " + payMethod);
+			Log.d(FDMS_TAG, "--- localCurrCode: " + localCurrCode);
+			Log.d(FDMS_TAG, "--- merchantId: " + merchantId);
+			Log.d(FDMS_TAG, "--- merchantName: " + merchantName);
+			Log.d(FDMS_TAG, "--- productCode: " + productCode);
+			Log.d(FDMS_TAG, "--- RRN: " + RRN);
+			Log.d(FDMS_TAG, "--- rspCode: " + saleResCodeFDMS);
+			Log.d(FDMS_TAG, "--- rspMsg: " + rspMsg);
+			Log.d(FDMS_TAG, "--- tc: " + tc);
+			Log.d(FDMS_TAG, "--- tenure: " + tenure);
+			Log.d(FDMS_TAG, "--- tsi: " + tsi);
+			Log.d(FDMS_TAG, "--- terminalId: " + terminalId);
+			Log.d(FDMS_TAG, "--- tipAmount: " + tipAmount);
+			Log.d(FDMS_TAG, "--- traceNo: " + traceNo);
+			Log.d(FDMS_TAG, "---transTime: " + transTime);
+			Log.d(FDMS_TAG, "--- tvr: " + tvr);
 
 			fdmsVariable.setResponseCode(saleResCodeFDMS);
 			fdmsVariable.setReturnMsg(rspMsg);
@@ -469,7 +483,7 @@ public class FdmsRequest extends AppCompatActivity {
 
 				FdmsHttpReq updateTxn = new FdmsHttpReq(new FdmsAsyncResponse() {
 					@Override
-					public void processFinish(String output) {
+					public void processFinish(FdmsVariable output) {
 						Fdresponse.getResponse(output);
 					}
 				}, fdmsVariable, FdmsRequest.this, context);
@@ -491,20 +505,26 @@ public class FdmsRequest extends AppCompatActivity {
 
 				FdmsHttpReq updateTxn = new FdmsHttpReq(new FdmsAsyncResponse() {
 					@Override
-					public void processFinish(String output) {
+					public void processFinish(FdmsVariable output) {
 						Fdresponse.getResponse(output);
 					}
 				}, fdmsVariable, FdmsRequest.this, context);
 				updateTxn.execute();
 				// Continue to FdmsHttpRequest.java
 			}
+		} else {
+			Log.d(FDMS_TAG, "FDMS Sales Failed");
+			Log.d(FDMS_TAG, "Payment Ref: " + fdmsVariable.getPayRef());
+
+			fdmsVariable.setErrMsg("Sales Request Failed");
+			Fdresponse.getResponse(fdmsVariable);
 		}
 	}
 
 	public void voidResponse(int requestCode, int resultCode, Intent data) {
-		System.out.println("requestCode: " + requestCode);
-		System.out.println("resultCode: " + resultCode);
-		System.out.println("data: " + data);
+		Log.d(FDMS_TAG, "requestCode: " + requestCode);
+		Log.d(FDMS_TAG, "resultCode: " + resultCode);
+		Log.d(FDMS_TAG, "data: " + data);
 
 		//VoidMsg.Response response = (VoidMsg.Response) transAPI.onResult(requestCode, resultCode, data);
 		// Printout Intent value
@@ -513,12 +533,12 @@ public class FdmsRequest extends AppCompatActivity {
 			if (bundle != null) {
 				Set<String> keys = bundle.keySet();
 				Iterator<String> it = keys.iterator();
-				System.out.println("Intent value start");
+				Log.d(FDMS_TAG, "Intent value start");
 				while (it.hasNext()) {
 					String key = it.next();
-					System.out.println("[" + key + "=" + bundle.get(key) + "]");
+					Log.d(FDMS_TAG, "[" + key + "=" + bundle.get(key) + "]");
 				}
-				System.out.println("Intent value end");
+				Log.d(FDMS_TAG, "Intent value end");
 			}
 		}
 
@@ -550,34 +570,35 @@ public class FdmsRequest extends AppCompatActivity {
 				traceNo = "0" + traceNo;
 			}
 
-			System.out.println("FDMS Void Success");
-			System.out.println("Payment Ref: " + payRef);
+			Log.d(FDMS_TAG, "FDMS Void Success");
+			Log.d(FDMS_TAG, "Payment Ref: " + fdmsVariable.getPayRef());
 
 			fdmsVariable.setRequestAction(EnvBase.FDRequest.VOID);
 			fdmsVariable.setAction("Void");
 			fdmsVariable.setInvoiceNo(invoiceNo);
 			fdmsVariable.setTraceNo(traceNo);
-			fdmsVariable.setUserID("apiuser");
-			fdmsVariable.setPassword("api1234");
 
 			FdmsHttpReq voidTxn = new FdmsHttpReq(new FdmsAsyncResponse() {
 				@Override
-				public void processFinish(String output) {
+				public void processFinish(FdmsVariable output) {
 					Fdresponse.getResponse(output);
 				}
 			}, fdmsVariable, FdmsRequest.this, context);
 			voidTxn.execute();
 			// Continue to FdmsHttpRequest.java
 		} else {
-			System.out.println("FDMS Void Failed");
-			System.out.println("Payment Ref: " + payRef);
+			Log.d(FDMS_TAG, "FDMS Void Failed");
+			Log.d(FDMS_TAG, "Payment Ref: " + fdmsVariable.getPayRef());
+
+			fdmsVariable.setErrMsg("Void Request Failed");
+			Fdresponse.getResponse(fdmsVariable);
 		}
 	}
 
 	public void settlementResponse(int requestCode, int resultCode, Intent data, ArrayList<String> payRefArray) {
-		System.out.println("requestCode: " + requestCode);
-		System.out.println("resultCode: " + resultCode);
-		System.out.println("data: " + data);
+		Log.d(FDMS_TAG, "requestCode: " + requestCode);
+		Log.d(FDMS_TAG, "resultCode: " + resultCode);
+		Log.d(FDMS_TAG, "data: " + data);
 
 		System.out.print("payRefArray payRefArray: " + payRefArray);
 
@@ -587,12 +608,12 @@ public class FdmsRequest extends AppCompatActivity {
 			if (bundle != null) {
 				Set<String> keys = bundle.keySet();
 				Iterator<String> it = keys.iterator();
-				System.out.println("Intent value start");
+				Log.d(FDMS_TAG, "Intent value start");
 				while (it.hasNext()) {
 					String key = it.next();
-					System.out.println("[" + key + "=" + bundle.get(key) + "]");
+					Log.d(FDMS_TAG, "[" + key + "=" + bundle.get(key) + "]");
 				}
-				System.out.println("Intent value end");
+				Log.d(FDMS_TAG, "Intent value end");
 			}
 		}
 
@@ -613,8 +634,8 @@ public class FdmsRequest extends AppCompatActivity {
 		}
 
 		if (settleResCodeFDMS == 0) {
-			System.out.println("FDMS Settlement Success");
-			System.out.println("Payment Ref Array: " + payRefArray);
+			Log.d(FDMS_TAG, "FDMS Settlement Success");
+			Log.d(FDMS_TAG, "Payment Ref Array: " + payRefArray);
 
 			fdmsVariable.setRequestAction(EnvBase.FDRequest.SETTLEMENT);
 			fdmsVariable.setAction("settlement");
@@ -622,7 +643,7 @@ public class FdmsRequest extends AppCompatActivity {
 
 			FdmsHttpReq settlementTxn = new FdmsHttpReq(new FdmsAsyncResponse() {
 				@Override
-				public void processFinish(String output) {
+				public void processFinish(FdmsVariable output) {
 					Fdresponse.getResponse(output);
 				}
 			}, fdmsVariable, FdmsRequest.this, context);
@@ -630,11 +651,12 @@ public class FdmsRequest extends AppCompatActivity {
 			// Continue to FdmsHttpRequest.java
 
 		} else {
-			System.out.println("FDMS Settlement Failed");
-			System.out.println("Payment Ref Array: " + payRefArray);
+			Log.d(FDMS_TAG, "FDMS Settlement Failed");
+			Log.d(FDMS_TAG, "Payment Ref Array: " + payRefArray);
 
+			fdmsVariable.setErrMsg("Settlement Request Failed");
+			Fdresponse.getResponse(fdmsVariable);
 //			fdmsVariable.setRequestAction("settlementTxnFailed");
-
 //			GlobalFunction.disablePaxNavigationButton(context);
 		}
 	}

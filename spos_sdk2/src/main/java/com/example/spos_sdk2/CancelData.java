@@ -1,12 +1,10 @@
 package com.example.spos_sdk2;
 
-import android.app.Activity;
-
 public class CancelData {
 
     private String merchantId;
     private String payRef;
-    private EnvBase.PayMethod pMethod;
+    private EnvBase.PayMethod payMethod;
     private EnvBase.PayGate payGate;
     private String currCode;
 
@@ -30,12 +28,12 @@ public class CancelData {
         return payGate;
     }
 
-    public EnvBase.PayMethod getpMethod() {
-        return pMethod;
+    public EnvBase.PayMethod getPayMethod() {
+        return payMethod;
     }
 
-    public void setpMethod(EnvBase.PayMethod pMethod) {
-        this.pMethod = pMethod;
+    public void setPayMethod(EnvBase.PayMethod payMethod) {
+        this.payMethod = payMethod;
     }
 
     public void setPayGate(EnvBase.PayGate payGate) {

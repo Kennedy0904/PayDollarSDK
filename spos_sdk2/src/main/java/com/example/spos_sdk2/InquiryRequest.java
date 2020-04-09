@@ -73,7 +73,7 @@ public class InquiryRequest {
         } else if (inquiryData.getPayRef() == null ||inquiryData.getPayRef().isEmpty()) {
             errorResult.setErrCode(ErrorCode.ERR_PAYREFNO);
             errorResult.setErrMessage("Please add the reference no of transaction.");
-        } else if (inquiryData.getpMethod() == null){
+        } else if (inquiryData.getPayMethod() == null){
             errorResult.setErrCode(ErrorCode.ERR_PAYMETHOD);
             errorResult.setErrMessage("Please add the payment method of transaction.");
         } else if(inquiryData.getPayGate() == null){

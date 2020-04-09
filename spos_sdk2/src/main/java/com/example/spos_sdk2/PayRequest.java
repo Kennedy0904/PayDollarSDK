@@ -82,7 +82,7 @@ public class PayRequest {
         } else if (payData.getOrderRef() == null || payData.getOrderRef().isEmpty()){
             errorResult.setErrCode(ErrorCode.ERR_MERREFNO);
             errorResult.setErrMessage("Please add the merchant reference no of transaction.");
-        } else if (payData.getpMethod() == null){
+        } else if (payData.getPayMethod() == null){
             errorResult.setErrCode(ErrorCode.ERR_PAYMETHOD);
             errorResult.setErrMessage("Please add the payment method of transaction.");
         } else  if (payData.getPayment() == null){
@@ -92,19 +92,36 @@ public class PayRequest {
             errorResult.setErrCode(ErrorCode.ERR_PAYGATE);
             errorResult.setErrMessage("Please add the paygate.");
         } else {
-            isDataValid = true;
-        }
-
-        if (payData.getPayment() != null && (payData.getTxnNo() == null || payData.getTxnNo().isEmpty())) {
+            /** TrxNo or Card Data checking */
+            /** Scan QR flow */
             if (payData.getPayment().equals(EnvBase.Payment.SCAN_QR)) {
-                errorResult.setErrCode(ErrorCode.ERR_TXNNO);
-                errorResult.setErrMessage("Please add the transaction number");
-                isDataValid = false;
-            } else if (payData.getPayment().equals(EnvBase.Payment.CARD)) {
-                errorResult.setErrCode(ErrorCode.ERR_TXNNO);
-                errorResult.setErrMessage("Please add the card number");
-                isDataValid = false;
-            }else {
+
+                if(payData.getTxnNo() == null || payData.getTxnNo().isEmpty()){
+                    errorResult.setErrCode(ErrorCode.ERR_TXNNO);
+                    errorResult.setErrMessage("Please add the transaction number");
+                } else {
+                    isDataValid = true;
+                }
+            }
+            /** Card Payment flow */
+            else if (payData.getPayment().equals(EnvBase.Payment.CARD)) {
+
+                if (payData.getCardData() == null){
+                    errorResult.setErrCode(ErrorCode.ERR_CARDDATA);
+                    errorResult.setErrMessage("Card data cannot be null.");
+                } else if (payData.getCardData().getCardNo() == null || payData.getCardData().getCardNo().isEmpty()){
+                    errorResult.setErrCode(ErrorCode.ERR_CARDNO);
+                    errorResult.setErrMessage("Please add the card number");
+                } else if (payData.getCardData().getEpMonth()  == null ||payData.getCardData().getEpMonth() .isEmpty()) {
+                    errorResult.setErrCode(ErrorCode.ERR_EPMONTH);
+                    errorResult.setErrMessage("Please add the card expiry month.");
+                } else if (payData.getCardData().getEpYear()  == null ||payData.getCardData().getEpYear() .isEmpty()) {
+                    errorResult.setErrCode(ErrorCode.ERR_CURCODE);
+                    errorResult.setErrMessage("Please add the card expiry year.");
+                } else {
+                    isDataValid = true;
+                }
+            } else{
                 isDataValid = true;
             }
         }

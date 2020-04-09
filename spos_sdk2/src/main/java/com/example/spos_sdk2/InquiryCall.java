@@ -34,7 +34,7 @@ public class InquiryCall {
         InquiryResult inquiryResult = new InquiryResult();
 
         try {
-            baseUrl = setInquiryURL(inquiryData.getPayGate(), inquiryData.getpMethod());
+            baseUrl = setInquiryURL(inquiryData.getPayGate(), inquiryData.getPayMethod());
             URL url = new URL(baseUrl);
 
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -44,12 +44,12 @@ public class InquiryCall {
             Map<String, String> parameters = new HashMap<>();
             parameters.put(Constants.merchantId, inquiryData.getMerchantId());
             parameters.put(Constants.orderId, inquiryData.getPayRef());
-            parameters.put(Constants.pMethod, inquiryData.getpMethod().toString());
+            parameters.put(Constants.pMethod, inquiryData.getPayMethod().toString());
             parameters.put(Constants.action, "inquiry");
 
             Log.d(INQUIRY_TAG, "merchantId: " + inquiryData.getMerchantId());
             Log.d(INQUIRY_TAG, "orderId: " + inquiryData.getPayRef());
-            Log.d(INQUIRY_TAG, "pMethod: " + inquiryData.getpMethod().toString());
+            Log.d(INQUIRY_TAG, "pMethod: " + inquiryData.getPayMethod().toString());
 
             con.setDoOutput(true);
             DataOutputStream out = new DataOutputStream(con.getOutputStream());

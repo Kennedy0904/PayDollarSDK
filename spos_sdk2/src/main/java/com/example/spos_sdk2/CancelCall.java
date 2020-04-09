@@ -31,7 +31,7 @@ public class CancelCall {
         HashMap<String, String> map;
 
         try {
-            baseUrl = setCancelURL(cancelData.getPayGate(), cancelData.getpMethod());
+            baseUrl = setCancelURL(cancelData.getPayGate(), cancelData.getPayMethod());
             URL url = new URL(baseUrl);
 
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -41,10 +41,10 @@ public class CancelCall {
             Map<String, String> parameters = new HashMap<>();
             parameters.put(Constants.merchantId, cancelData.getMerchantId());
             parameters.put(Constants.orderId, cancelData.getPayRef());
-            parameters.put(Constants.pMethod, cancelData.getpMethod().toString());
+            parameters.put(Constants.pMethod, cancelData.getPayMethod().toString());
             parameters.put(Constants.action, "cancel");
 
-            if(cancelData.getpMethod().toString().equals("BOOSTOFFL")){
+            if(cancelData.getPayMethod().toString().equals("BOOSTOFFL")){
                 parameters.put("currCode", cancelData.getCurrCode());
                 parameters.put("cardNo", "4518354303130007");
                 parameters.put("payType", "N");
@@ -57,7 +57,7 @@ public class CancelCall {
 
             Log.d(CANCEL_TAG, "merchantId: " + cancelData.getMerchantId());
             Log.d(CANCEL_TAG, "orderId: " + cancelData.getPayRef());
-            Log.d(CANCEL_TAG, "pMethod: " + cancelData.getpMethod().toString());
+            Log.d(CANCEL_TAG, "pMethod: " + cancelData.getPayMethod().toString());
 
             con.setDoOutput(true);
             DataOutputStream out = new DataOutputStream(con.getOutputStream());

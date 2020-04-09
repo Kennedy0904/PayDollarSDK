@@ -34,4 +34,10 @@ public class ErrorCode {
     public final static int ERR_SETTLEMENTDATA = -24;
     public final static int ERR_BATCHNO= -25;
     public final static int ERR_PAYBANKID = -26;
+
+    /** Card Data */
+    public final static int ERR_CARDDATA = -27;
+    public final static int ERR_CARDNO= -28;
+    public final static int ERR_EPMONTH = -29;
+    public final static int ERR_EPYEAR = -30;
 }

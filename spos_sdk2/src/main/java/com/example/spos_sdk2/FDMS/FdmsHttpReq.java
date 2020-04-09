@@ -73,7 +73,7 @@ public class FdmsHttpReq extends AsyncTask<String, Void, String> {
             parameters.put("POSCondtionCode", fdmsVariable.getPOSCondtionCode());
             parameters.put("track2Data", fdmsVariable.getTrack2Data());
             parameters.put("enryptedPIN", fdmsVariable.getEnryptedPIN());
-            parameters.put("EMVData", fdmsVariable.getEMVICCRelatedData());
+            parameters.put("ISO8583Data", fdmsVariable.getEMVICCRelatedData());
             parameters.put("channelType", "MPOS");
 
 //            parameters.put("invoiceRef", FdmsVariable.getInvoiceRef());
@@ -232,7 +232,7 @@ public class FdmsHttpReq extends AsyncTask<String, Void, String> {
 
                 if (fdmsVariable.getErrMsg() != null) {
 
-                    delegate.processFinish(fdmsVariable.getErrMsg());
+                    delegate.processFinish(fdmsVariable);
 
                     fdmsVariable.setRequestAction(EnvBase.FDRequest.UPDATE_FAILED_TXN);
                     fdmsVariable.setAction("Update_Failed_Txn");
@@ -241,27 +241,54 @@ public class FdmsHttpReq extends AsyncTask<String, Void, String> {
                     request.execute();
 
                 } else {
-                    delegate.processFinish("Create transaction failed");
+                    fdmsVariable.setErrMsg("Create transaction failed");
+                    delegate.processFinish(fdmsVariable);
                 }
             }
         } else if (fdmsVariable.getRequestAction().toString().contains("updateTxn")) {
 
             Log.d(FDMS_TAG, "FDMS Txn update result: " + result);
 
-            delegate.processFinish(result);
+            HashMap<String, String> map = PayGate.split(result);
+            fdmsVariable.setUpdateTxnCode(map.get("resultCode"));
+            fdmsVariable.setStatus(map.get("status"));
+            fdmsVariable.setErrCode(map.get("errCode"));
+            fdmsVariable.setReturnMsg(map.get("returnMsg"));
+            fdmsVariable.setPayRef(map.get("orderId"));
+            fdmsVariable.setTxnTime(map.get("trxTime"));
+            fdmsVariable.setBankRef(map.get("bankRef"));
+            fdmsVariable.setAmount(map.get("amount"));
+
+            delegate.processFinish(fdmsVariable);
 
         } else if (fdmsVariable.getRequestAction().toString().contains("voidTxn")) {
 
             Log.d(FDMS_TAG, "FDMS Txn void result: " + result);
 
-            delegate.processFinish(result);
+            HashMap<String, String> map = PayGate.split(result);
+            fdmsVariable.setVoidTxnCode(map.get("resultCode"));
+            fdmsVariable.setPayRef(map.get("payRef"));
+            fdmsVariable.setStatus(map.get("orderStatus"));
+            fdmsVariable.setReturnMsg(map.get("errMsg"));
+            fdmsVariable.setAmount(map.get("amt"));
 
-        } else if (fdmsVariable.getRequestAction().toString().contains("settleTxn")) {
+            delegate.processFinish(fdmsVariable);
+
+        } else if (fdmsVariable.getRequestAction().toString().equals("settlementTxn")) {
 
             Log.d(FDMS_TAG, "FDMS Txn settlement result: " + result);
 
-            delegate.processFinish(result);
+            HashMap<String, String> map = PayGate.split(result);
+            fdmsVariable.setSettleTxnCode(map.get("resultCode"));
+            fdmsVariable.setStatus(map.get("status"));
+            fdmsVariable.setErrCode(map.get("errCode"));
+            fdmsVariable.setReturnMsg(map.get("returnMsg"));
+            fdmsVariable.setPayRef(map.get("orderId"));
+            fdmsVariable.setTxnTime(map.get("TxnTime"));
+            fdmsVariable.setBankRef(map.get("bankRef"));
+            fdmsVariable.setAmount(map.get("amount"));
 
+            delegate.processFinish(fdmsVariable);
         }
     }
 

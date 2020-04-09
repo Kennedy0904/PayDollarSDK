@@ -74,7 +74,7 @@ public class CancelRequest {
         } else if (cancelData.getPayRef() == null ||cancelData.getPayRef().isEmpty()) {
             errorResult.setErrCode(ErrorCode.ERR_PAYREFNO);
             errorResult.setErrMessage("Please add the reference no of transaction.");
-        } else if (cancelData.getpMethod() == null){
+        } else if (cancelData.getPayMethod() == null){
             errorResult.setErrCode(ErrorCode.ERR_PAYMETHOD);
             errorResult.setErrMessage("Please add the payment method of transaction.");
         } else if(cancelData.getPayGate() == null){
